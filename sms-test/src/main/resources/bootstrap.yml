@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: sms-test
+  cloud:
+    nacos: # nacos注册中心地址
+      discovery:
+        server-addr: 172.16.30.198:8848
