@@ -1,5 +1,6 @@
 package com.personal.api.filter;
 
+import com.personal.model.StandardSubmit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
@@ -25,11 +26,11 @@ public class ChainFilterContext {
     @Value("${filters:apikey,ip,sign,mobile,template,fee}")
     private String filters;
 
-    public void checkManagement(Object o) {
+    public void checkManagement(StandardSubmit submit) {
         String[] split = filters.split(",");
         for (String s : split) {
             ChainFilter chainFilter = chainFilterMap.get(s);
-            chainFilter.check(o);
+            chainFilter.check(submit);
         }
     }
 }

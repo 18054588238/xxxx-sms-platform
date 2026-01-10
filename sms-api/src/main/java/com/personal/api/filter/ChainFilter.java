@@ -1,5 +1,7 @@
 package com.personal.api.filter;
 
+import com.personal.model.StandardSubmit;
+
 /**
  * @ClassName ChainFilter
  * @Author liupanpan
@@ -12,5 +14,5 @@ package com.personal.api.filter;
  * 基于Nacos提供的一个配置的 动态刷新 去实现，指定好整体校验链，需要改变时，只需要去修改Nacos中的配置文件即可。
  */
 public interface ChainFilter {
-    void check(Object obj);
+    void check(StandardSubmit submit);
 }

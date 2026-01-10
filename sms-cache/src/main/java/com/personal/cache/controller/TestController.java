@@ -2,10 +2,12 @@ package com.personal.cache.controller;
 
 import com.msb.framework.redis.RedisClient;
 import com.personal.cache.model.TestUser;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 /**
  * @ClassName TestController
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @Description
  */
 @RestController
+@Slf4j
 public class TestController {
     @Autowired
     private RedisClient redisClient;
@@ -29,5 +32,18 @@ public class TestController {
         Object user1 = redisClient.get("msbObj");
         System.out.println(s);
         System.out.println(user1);
+    }
+
+
+    @PostMapping("/setValue")
+    public void setValue(@RequestParam String key, @RequestParam Object value) {
+        redisClient.set(key,value);
+        log.info("setValue:{}",value);
+    }
+
+    @PostMapping("/setMap")
+    public void setMap(@RequestParam String key,@RequestBody Map<String,Object> ... value) {
+        redisClient.sAdd(key,value);
+        log.info("setMap:{}",value);
     }
 }

@@ -1,6 +1,7 @@
 package com.personal.api.controller;
 
 import com.personal.api.filter.ChainFilterContext;
+import com.personal.model.StandardSubmit;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,7 +20,7 @@ public class ChainFilterController {
     private ChainFilterContext chainFilterContext;
 
     @PostMapping("/check")
-    public void checkManagement(Object obj){
-        chainFilterContext.checkManagement(obj);
+    public void checkManagement(StandardSubmit submit){
+        chainFilterContext.checkManagement(submit);
     }
 }

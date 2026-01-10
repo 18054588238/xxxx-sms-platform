@@ -1,6 +1,7 @@
 package com.personal.api.filter.impl;
 
 import com.personal.api.filter.ChainFilter;
+import com.personal.model.StandardSubmit;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -14,7 +15,7 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class ApiKeyCheckFilter implements ChainFilter {
     @Override
-    public void check(Object obj) {
+    public void check(StandardSubmit submit) {
         log.info("[接口模块-校验apikey。。。]");
     }
 }
