@@ -1,9 +1,17 @@
 package com.personal.api.filter.impl;
 
+import com.personal.Constant.CacheConstant;
+import com.personal.api.feign.CacheFeignClient;
 import com.personal.api.filter.ChainFilter;
+import com.personal.enums.ExceptionEnums;
+import com.personal.exception.ApiException;
 import com.personal.model.StandardSubmit;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.tomcat.util.bcel.classfile.Constant;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Map;
 
 /**
  * @ClassName IPCheckFilter
@@ -14,8 +22,22 @@ import org.springframework.stereotype.Service;
 @Service(value = "ip")
 @Slf4j
 public class IPCheckFilter implements ChainFilter {
+    @Autowired
+    private CacheFeignClient cacheFeignClient;
+
+    private final String IP_ADDRESS_KEY = "ip_address";
+
     @Override
     public void check(StandardSubmit submit) {
-        log.info("[接口模块-校验 ip。。。]");
+
+        /*Map<String, Object> map = cacheFeignClient.getMap(CacheConstant.CLIENT_BUSINESS + submit.getApikey());
+
+        String ip = (String) map.get(IP_ADDRESS_KEY);
+        if (ip == null || ip.contains(submit.getRealIP())) {
+            submit.setIp(ip);
+            log.info("[接口模块-校验 ip通过]");
+        }
+        log.error("[接口模块-校验 请求的ip不在白名单内]");
+        throw new ApiException(ExceptionEnums.IP_NOT_WHITE);*/
     }
 }

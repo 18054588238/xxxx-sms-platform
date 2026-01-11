@@ -12,6 +12,6 @@ class ChainFilterContextTest {
     ChainFilterContext chainFilterContext;
     @Test
     void contextLoads() {
-        chainFilterContext.checkManagement(new Object());
+        chainFilterContext.checkManagement(null);
     }
 }

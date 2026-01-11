@@ -1,9 +1,9 @@
 package com.personal.api.controller;
 
 import com.personal.api.entity.req.SingleSendReq;
-import com.personal.api.entity.res.R;
-import com.personal.api.entity.res.ResultVO;
-import com.personal.api.enums.SmsCodeEnum;
+import com.personal.enums.ExceptionEnums;
+import com.personal.res.R;
+import com.personal.res.ResultVO;
 import com.personal.api.filter.ChainFilterContext;
 import com.personal.model.StandardSubmit;
 import lombok.extern.slf4j.Slf4j;
@@ -11,7 +11,6 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.List;
 
 /**
  * @ClassName SmsController
@@ -54,7 +52,7 @@ public class SmsController {
         if (result.hasErrors()) {
             String message = result.getFieldError().getDefaultMessage();
             log.info("【接口模块-单条短信Controller】 参数不合法 msg = {}",message);
-            return R.error(SmsCodeEnum.PARAMETER_ERROR.getCode(),message);
+            return R.error(ExceptionEnums.PARAMETER_ERROR.getCode(),message);
         }
         // 获取客户端真实的IP地址
         String realIP = getRealIP(request);
@@ -67,6 +65,8 @@ public class SmsController {
         submit.setUid(req.getUid());
         submit.setState(req.getState());
 
+        // 校验
+        chainFilterContext.checkManagement(submit);
         return R.ok();
     }
 

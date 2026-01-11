@@ -16,9 +16,9 @@ import java.util.Map;
  */
 @FeignClient("sms-cache")
 public interface CacheFeignClient {
-    @PostMapping("/setValue")
+    @PostMapping("/cache/setValue")
     void setValue(@RequestParam String key, @RequestParam Object value);
 
-    @PostMapping("/setMap")
+    @PostMapping("/cache/setMap")
     void setMap(@RequestParam String key,@RequestBody Map<String,Object> ...value);
 }

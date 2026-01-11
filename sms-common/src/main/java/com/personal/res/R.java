@@ -1,4 +1,6 @@
-package com.personal.api.entity.res;
+package com.personal.res;
+
+import com.personal.enums.ExceptionEnums;
 
 /**
  * @ClassName R
@@ -18,6 +20,12 @@ public class R {
         ResultVO r = new ResultVO();
         r.setCode(code);
         r.setMsg(message);
+        return r;
+    }
+    public static ResultVO error(ExceptionEnums enums) {
+        ResultVO r = new ResultVO();
+        r.setCode(enums.getCode());
+        r.setMsg(enums.getMessage());
         return r;
     }
 }

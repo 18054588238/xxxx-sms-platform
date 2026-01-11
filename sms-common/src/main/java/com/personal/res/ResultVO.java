@@ -1,4 +1,4 @@
-package com.personal.api.entity.res;
+package com.personal.res;
 
 import lombok.Data;
 
