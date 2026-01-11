@@ -3,6 +3,7 @@ package com.personal.test.mapper;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.personal.test.entity.ClientBalance;
 import com.personal.test.entity.ClientBusiness;
 import com.personal.test.entity.ClientSign;
 import com.personal.test.entity.ClientTemplate;
@@ -42,9 +43,13 @@ class ClientMapperTest {
     }
 
     @Test
-    void clientBalanceMapperTest(){
-        Long balance = clientBalanceMapper.findByClientId(1l);
-        cacheFeignClient.setValue("client_balance:1",balance);
+    void clientBalanceMapperTest() throws JsonProcessingException {
+        ClientBalance balance = clientBalanceMapper.findByClientId(1l);
+        ObjectMapper objectMapper = new ObjectMapper();
+        // 这里需要注册JavaTimeModule
+        objectMapper.registerModule(new JavaTimeModule());
+        Map map = objectMapper.readValue(objectMapper.writeValueAsString(balance), Map.class);
+        cacheFeignClient.setHMap("client_balance:1",map);
         System.out.println(balance);
     }
 

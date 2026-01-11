@@ -19,6 +19,9 @@ public interface CacheFeignClient {
     @PostMapping("/cache/setValue")
     void setValue(@RequestParam String key, @RequestParam Object value);
 
-    @PostMapping("/cache/setMap")
+    @PostMapping("/cache/setHMap")
+    public void setHMap(@RequestParam String key,@RequestBody Map<String,Object> value);
+
+    @PostMapping("/cache/setMaps")
     void setMap(@RequestParam String key,@RequestBody Map<String,Object> ...value);
 }

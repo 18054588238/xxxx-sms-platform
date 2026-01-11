@@ -9,4 +9,7 @@ package com.personal.Constant;
 public class ApiConstant {
     public static String SIGN_PREFIX = "【";
     public static String SIGN_SUFFIX = "】";
+
+    // 单条短信的费用
+    public static Long SINGLE_FEE = 40L;
 }

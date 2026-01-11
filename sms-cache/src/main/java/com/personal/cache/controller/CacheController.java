@@ -63,7 +63,13 @@ public class CacheController {
         log.info("setValue:{}",value);
     }
 
-    @PostMapping("/setMap")
+    @PostMapping("/setHMap")
+    public void setHMap(@RequestParam String key,@RequestBody Map<String,Object> value) {
+        redisClient.hSet(key,value);
+        log.info("setMap:{}",value);
+    }
+
+    @PostMapping("/setMaps")
     public void setMap(@RequestParam String key,@RequestBody Map<String,Object> ... value) {
         redisClient.sAdd(key,value);
         log.info("setMap:{}",value);
