@@ -1,4 +1,4 @@
-package com.personal.Constant;
+package com.personal.common.Constant;
 
 /**
  * @ClassName ApiConstant

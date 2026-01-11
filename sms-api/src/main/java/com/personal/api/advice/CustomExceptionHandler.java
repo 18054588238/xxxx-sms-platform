@@ -1,8 +1,8 @@
 package com.personal.api.advice;
 
-import com.personal.exception.ApiException;
-import com.personal.res.R;
-import com.personal.res.ResultVO;
+import com.personal.common.exception.ApiException;
+import com.personal.common.res.R;
+import com.personal.common.res.ResultVO;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 

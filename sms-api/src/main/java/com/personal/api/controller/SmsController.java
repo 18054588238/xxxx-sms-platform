@@ -1,11 +1,12 @@
 package com.personal.api.controller;
 
 import com.personal.api.entity.req.SingleSendReq;
-import com.personal.enums.ExceptionEnums;
-import com.personal.res.R;
-import com.personal.res.ResultVO;
+import com.personal.common.enums.ExceptionEnums;
+import com.personal.common.res.R;
+import com.personal.common.res.ResultVO;
 import com.personal.api.filter.ChainFilterContext;
-import com.personal.model.StandardSubmit;
+import com.personal.common.model.StandardSubmit;
+import com.personal.common.utils.SnowFlakeUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +33,8 @@ public class SmsController {
 
     @Autowired
     private ChainFilterContext chainFilterContext;
+    @Autowired
+    private SnowFlakeUtil snowFlakeUtil;
 
     @Value("${headers}")
     private String headers;
@@ -64,6 +67,8 @@ public class SmsController {
         submit.setText(req.getText());
         submit.setUid(req.getUid());
         submit.setState(req.getState());
+
+        submit.setSequenceId(snowFlakeUtil.nextId());
 
         // 校验
         chainFilterContext.checkManagement(submit);

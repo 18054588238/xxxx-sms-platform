@@ -1,6 +1,6 @@
 package com.personal.api.filter;
 
-import com.personal.model.StandardSubmit;
+import com.personal.common.model.StandardSubmit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;

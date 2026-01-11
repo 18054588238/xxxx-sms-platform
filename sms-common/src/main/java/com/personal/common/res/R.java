@@ -1,6 +1,6 @@
-package com.personal.res;
+package com.personal.common.res;
 
-import com.personal.enums.ExceptionEnums;
+import com.personal.common.enums.ExceptionEnums;
 
 /**
  * @ClassName R

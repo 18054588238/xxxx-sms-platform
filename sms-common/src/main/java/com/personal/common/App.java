@@ -1,4 +1,4 @@
-package com.personal;
+package com.personal.common;
 
 /**
  * Hello world!

@@ -1,6 +1,6 @@
-package com.personal.exception;
+package com.personal.common.exception;
 
-import com.personal.enums.ExceptionEnums;
+import com.personal.common.enums.ExceptionEnums;
 import lombok.Getter;
 
 /**

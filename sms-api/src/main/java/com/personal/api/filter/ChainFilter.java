@@ -1,6 +1,6 @@
 package com.personal.api.filter;
 
-import com.personal.model.StandardSubmit;
+import com.personal.common.model.StandardSubmit;
 
 /**
  * @ClassName ChainFilter

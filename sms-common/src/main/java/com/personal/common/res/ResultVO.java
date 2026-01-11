@@ -1,4 +1,4 @@
-package com.personal.res;
+package com.personal.common.res;
 
 import lombok.Data;
 
