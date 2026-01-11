@@ -37,6 +37,7 @@ public class SignCheckFilter implements ChainFilter {
      * 客户存储签名信息的字段
      */
     private final String CLIENT_SIGN_INFO = "signInfo";
+    private final String SIGN_ID = "id";
 
     @Override
     public void check(StandardSubmit submit) {
@@ -57,7 +58,10 @@ public class SignCheckFilter implements ChainFilter {
         AtomicBoolean matchFlag = new AtomicBoolean(false);
         valueSet.forEach(map -> {
             if (map.get(CLIENT_SIGN_INFO).equals(signText)) {
+                submit.setSign(signText);
+                submit.setSignId(Long.valueOf(map.get(SIGN_ID)+""));
                 matchFlag.set(true);
+                return;
             }
         });
 
@@ -66,6 +70,5 @@ public class SignCheckFilter implements ChainFilter {
             throw new ApiException(ExceptionEnums.ERROR_SIGN);
         }
         log.info("[接口模块-校验 找到匹配的签名 sign = {}",signText);
-        submit.setSign(signText);
     }
 }
