@@ -1,6 +1,7 @@
 package com.personal.api.controller;
 
 import com.personal.api.entity.req.SingleSendReq;
+import com.personal.common.constants.RabbitMQConstants;
 import com.personal.common.enums.ExceptionEnums;
 import com.personal.common.res.R;
 import com.personal.common.res.ResultVO;
@@ -9,6 +10,8 @@ import com.personal.common.model.StandardSubmit;
 import com.personal.common.utils.SnowFlakeUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
+import org.springframework.amqp.rabbit.connection.CorrelationData;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.validation.BindingResult;
@@ -35,6 +38,8 @@ public class SmsController {
     private ChainFilterContext chainFilterContext;
     @Autowired
     private SnowFlakeUtil snowFlakeUtil;
+    @Autowired
+    private RabbitTemplate rabbitTemplate;
 
     @Value("${headers}")
     private String headers;
@@ -72,6 +77,14 @@ public class SmsController {
 
         // 校验
         chainFilterContext.checkManagement(submit);
+
+        // 基于rabbitmq发送消息
+        // 生产者 → 交换机（Exchange） → 路由键（Routing Key） → 队列（Queue）
+        // 使用了默认交换机，将 SMS_PRE_SEND 作为路由键，消息会路由到同名的队列
+        rabbitTemplate.convertAndSend(RabbitMQConstants.SMS_PRE_SEND, // Routing Key ，由交换机根据路由规则转发到队列
+                submit,
+                new CorrelationData(submit.getSequenceId().toString()));
+
         return R.ok();
     }
 

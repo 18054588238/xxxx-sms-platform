@@ -1,4 +1,4 @@
-package com.personal.common.Constant;
+package com.personal.common.constants;
 
 /**
  * @ClassName ApiConstant
@@ -6,7 +6,7 @@ package com.personal.common.Constant;
  * @Date 2026/1/11
  * @Description
  */
-public class ApiConstant {
+public interface ApiConstant {
     public static String SIGN_PREFIX = "【";
     public static String SIGN_SUFFIX = "】";
 

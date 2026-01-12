@@ -1,7 +1,7 @@
 package com.personal.api.filter.impl;
 
-import com.personal.common.Constant.ApiConstant;
-import com.personal.common.Constant.CacheConstant;
+import com.personal.common.constants.ApiConstant;
+import com.personal.common.constants.CacheConstant;
 import com.personal.api.feign.CacheFeignClient;
 import com.personal.api.filter.ChainFilter;
 import com.personal.common.enums.ExceptionEnums;
