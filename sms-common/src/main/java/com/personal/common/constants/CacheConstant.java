@@ -10,5 +10,5 @@ public interface CacheConstant {
     public static final String CLIENT_SIGN = "client_sign:";
     public static final String CLIENT_BUSINESS = "client_business:";
     public static final String CLIENT_TEMPLATE = "client_template:";
-    public static final String CLIENT_BALANCE = "client_balance:";
+    public static final String MOBILE_PHASE = "phase:";
 }

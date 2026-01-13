@@ -25,4 +25,6 @@ public interface CacheFeignClient {
     @GetMapping("/cache/getFieldValue")
     String getFieldValueString(@RequestParam String key, @RequestParam String field);
 
+    @GetMapping("/cache/get")
+    String get(@RequestParam String key);
 }

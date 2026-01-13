@@ -43,6 +43,13 @@ public class CacheController {
         return redisClient.hGetAll(key);
     }
 
+    // 获取map类型
+    @GetMapping("/get")
+    Object get(@RequestParam String key) {
+
+        return redisClient.get(key);
+    }
+
     // 获取指定字段的值
     @GetMapping("/getFieldValue")
     Object getFieldValue(@RequestParam String key, @RequestParam String field) {
