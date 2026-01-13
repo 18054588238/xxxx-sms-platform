@@ -39,20 +39,8 @@
             <option name="tableUIInfoList">
               <list>
                 <TableUIInfo>
-                  <option name="className" value="ClientBalance" />
-                  <option name="tableName" value="client_balance" />
-                </TableUIInfo>
-                <TableUIInfo>
-                  <option name="className" value="ClientBusiness" />
-                  <option name="tableName" value="client_business" />
-                </TableUIInfo>
-                <TableUIInfo>
-                  <option name="className" value="ClientSign" />
-                  <option name="tableName" value="client_sign" />
-                </TableUIInfo>
-                <TableUIInfo>
-                  <option name="className" value="ClientTemplate" />
-                  <option name="tableName" value="client_template" />
+                  <option name="className" value="MobileArea" />
+                  <option name="tableName" value="mobile_area" />
                 </TableUIInfo>
               </list>
             </option>

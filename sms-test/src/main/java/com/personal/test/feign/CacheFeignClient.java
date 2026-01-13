@@ -24,4 +24,7 @@ public interface CacheFeignClient {
 
     @PostMapping("/cache/setMaps")
     void setMap(@RequestParam String key,@RequestBody Map<String,Object> ...value);
+
+    @PostMapping("/cache/pipeline")
+    void pipeline(@RequestBody Map<String,String> map);
 }

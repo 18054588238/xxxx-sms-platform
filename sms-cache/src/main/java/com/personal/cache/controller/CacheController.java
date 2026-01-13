@@ -55,7 +55,20 @@ public class CacheController {
         return redisClient.sMembers(key);
     }
 
-
+    /**
+     * 使用管道传输数据
+     * Redis管道（Pipeline）是一种客户端技术，用于将多个命令打包一次性发送给服务器，从而减少网络往返时间（RTT）
+     * @param map
+     */
+    @PostMapping("/pipeline")
+    public void pipeline(@RequestBody Map<String,String> map) {
+        log.info("pipeline map大小:{}", map.size());
+        redisClient.pipelined(operations -> {
+            map.forEach((k,v)->{
+                operations.opsForValue().set(k,v);
+            });
+        });
+    }
 
     @PostMapping("/setValue")
     public void setValue(@RequestParam String key, @RequestParam Object value) {
