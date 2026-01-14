@@ -94,4 +94,10 @@ public class CacheController {
         redisClient.sAdd(key,value);
         log.info("setMap:{}",value);
     }
+
+    @PostMapping("/setSStr")
+    public void setSStr(@RequestParam String key,@RequestBody String ... value) {
+        redisClient.sAdd(key,value);
+        log.info("setSStr:{}",value);
+    }
 }

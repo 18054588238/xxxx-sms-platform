@@ -32,6 +32,14 @@ class ClientMapperTest {
     private CacheFeignClient cacheFeignClient;
     @Autowired
     private MobileAreaMapper mobileAreaMapper;
+    @Autowired
+    private MobileDirtyWordMapper dirtyWordMapper;
+
+    @Test
+    void setDirtyWordTest() {
+        List<String> dirtyWord = dirtyWordMapper.getDirtyWord();
+        cacheFeignClient.setSStr("dirtyWord",dirtyWord.toArray(new String[0]));
+    }
 
     @Test
     void clientBusinessMapperTest() throws JsonProcessingException {
