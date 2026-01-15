@@ -18,7 +18,8 @@ public enum ExceptionEnums {
     BALANCE_NOT_ENOUGH(-6,"手客户余额不足"),
     PARAMETER_ERROR(-10,"参数不合法"),
     SNOWFLAKE_OUT_OF_RANGE(-11,"机器id或服务id超过最大范围值"),
-    SNOWFLAKE_TIME_BACK(-12,"当前服务出现时间回拨");
+    SNOWFLAKE_TIME_BACK(-12,"当前服务出现时间回拨"),
+    HAS_DIRTY_WORD(-13,"短信内容含有敏感词");
 
     private Integer code;
     private String message;

@@ -18,6 +18,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class StandardSubmit implements Serializable {
 
+    private static final long serialVersionUID = 1L;
     /**
      * 针对当前短信的唯一标识
      */
@@ -93,6 +94,9 @@ public class StandardSubmit implements Serializable {
      * 短信的发送状态， 0-等待ing，1-成功，2-失败
      */
     private int reportState;
+
+    // 短信发送失败的原因
+    private String errorMsg;
 
     // 后续再做封装~~~~
     /*获取到的客户端真实IP地址*/

@@ -1,5 +1,8 @@
 package com.personal.strategy.utils;
 
+import com.personal.common.constants.CacheConstant;
+import com.personal.strategy.feign.CacheFeignClient;
+
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -9,13 +12,24 @@ import java.util.Set;
  * @ClassName DFAUtil
  * @Author liupanpan
  * @Date 2026/1/14
- * @Description
+ * @Description dfa算法生成敏感词树，获取文本的敏感词
+ * 从设计角度，通常不推荐在工具类中直接依赖Spring容器，而是通过依赖注入将需要的Bean传入。
  */
 public class DFAUtil {
     // 敏感词树
     private static Map dfaMap = new HashMap<>();
 
     private static final String IS_END = "isEnd";
+
+    // todo 不安全，static是在类加载时执行，这时spring可能还未初始化完成，可能会获取不到bean
+    static {
+        // 获取Spring容器中的cacheClient
+        // 调用缓存模块获取敏感词，将敏感词生成敏感词树
+        CacheFeignClient cacheFeignClient = (CacheFeignClient) SpringUtil.getBeanByClazz(CacheFeignClient.class);
+        Set<String> dirtyWords = cacheFeignClient.getSMemberStr(CacheConstant.DIRTY_WORD);
+        createDfaMap(dirtyWords);
+    }
+
     /**
      * 创建敏感词树
      * dfaMap 的值变化机制：
@@ -27,7 +41,7 @@ public class DFAUtil {
      * 说明：
      * 1. 在操作 curMap 时，当 curMap 指向 dfaMap 时，我们通过 curMap.put(aChar, wordValueMap) 修改了 curMap 所引用的对象（也就是 dfaMap）的内容。
      */
-    public void createDfaMap(Set<String> dirtyWords){
+    public static void createDfaMap(Set<String> dirtyWords){
         Map curMap;
         for (String dirtyWord : dirtyWords) {
             curMap = dfaMap; // 在循环每个敏感词时，将当前指针重置到根节点。
@@ -65,20 +79,38 @@ public class DFAUtil {
      */
     public static Set<String> getDirtyWords(String text) {
         char[] chars = text.toCharArray();
+        // 存储匹配到的敏感词
         Set<String> dirtyWords = new HashSet<>();
-        Map curMap;
-        for (char aChar : chars) {
-            if (!dfaMap.containsKey(aChar)) {
+        for (int i = 0; i < chars.length; i++) {
+            // 每一个新字符都从敏感词树的开头开始遍历
+            Map curMap = dfaMap;
+            int nextIndex = 0; // 下一个需要遍历的字符索引
+            int dirtyLength = 0; // 敏感词长度
+            if (!dfaMap.containsKey(chars[i])) {
+                // 该字不是敏感词，匹配下一个字
                 continue;
             }
-            Map wordValueMap = (Map) dfaMap.get(aChar);
-            if (wordValueMap.get(IS_END).equals("0")) {
-                // 匹配下一个
-            } else {
-                dirtyWords.add()
+            // 该字在敏感词树中
+            for (int j = i; j < chars.length; j++) {
+                dirtyLength++;
+                curMap = (Map) curMap.get(chars[j]);
+                if (curMap == null) {
+                    break;
+                }
+                if ("0".equals(curMap.get(IS_END))) {
+                    // 匹配下一个
+                    continue;
+                } else { // is_end = 1
+                    nextIndex = dirtyLength; // 匹配上了敏感词
+                    break;
+                }
             }
-            curMap = wordValueMap;
+            if (nextIndex > 0) {
+                dirtyWords.add(text.substring(i,i+dirtyLength));
+                i=i+nextIndex-1;
+            }
         }
+        return dirtyWords;
     }
 
     public static void main(String[] args) {
@@ -92,8 +124,9 @@ public class DFAUtil {
 
         System.out.println(dfaMap);
 
-        String text = "你三胖啊山炮";
-        getDirtyWords(text);
+        String text = "你三山炮";
+        Set<String> dirtyWords1 = getDirtyWords(text);
+        System.out.println(dirtyWords1);
     }
 
 }

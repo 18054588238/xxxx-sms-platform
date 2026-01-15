@@ -21,6 +21,9 @@ public interface CacheFeignClient {
     @GetMapping("/cache/getSMember")
     Set<Map> getSMember(@RequestParam String key);
 
+    @GetMapping("/cache/getSMember")
+    Set<String> getSMemberStr(@RequestParam String key);
+
     /**
      * openFeign 进行类型转换 Object -> String
      */

@@ -30,6 +30,11 @@ public class RabbitMQConfig {
     }
 
     @Bean
+    public Queue writeLogQueue() {
+        return QueueBuilder.durable(RabbitMQConstants.SMS_WRITE_LOG).build();
+    }
+
+    @Bean
     public RabbitTemplate rabbitTemplate(ConnectionFactory connectionFactory) {
         RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);
         // 配置confirm和return机制，用于确保消息可靠地发送到RabbitMQ

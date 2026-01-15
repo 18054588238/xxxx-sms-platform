@@ -1,6 +1,7 @@
 package com.personal.strategy.listener;
 
 import com.personal.common.constants.RabbitMQConstants;
+import com.personal.common.exception.StrategyException;
 import com.personal.common.model.StandardSubmit;
 import com.personal.strategy.filter.ChainFilterContext;
 import com.rabbitmq.client.Channel;
@@ -47,9 +48,8 @@ public class PreSendListener {
             log.info("[策略模块] 接收消息 ,校验成功");
             // 处理成功后，手动确认消息
             channel.basicAck(message.getMessageProperties().getDeliveryTag(),false);
-        } catch (IOException e) {
-            e.printStackTrace();
-            log.error("[策略模块] 接收消息失败");
+        } catch (StrategyException e) {
+            log.warn("[策略模块] 校验不通过，接收消息失败,msg: {}",e.getMessage());
         }
     }
 }

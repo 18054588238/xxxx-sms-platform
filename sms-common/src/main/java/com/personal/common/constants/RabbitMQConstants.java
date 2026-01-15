@@ -12,4 +12,5 @@ public interface RabbitMQConstants {
      */
     String SMS_PRE_SEND = "sms_pre_send_topic";
     String MOBILE_AREA_OPERATOR = "mobile_area_operator_topic";
+    String SMS_WRITE_LOG = "sms_write_log_topic";
 }
