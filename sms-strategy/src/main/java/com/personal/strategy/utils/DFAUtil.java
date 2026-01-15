@@ -15,7 +15,7 @@ public class DFAUtil {
     // 敏感词树
     private static Map dfaMap = new HashMap<>();
 
-    private final String IS_END = "isEnd";
+    private static final String IS_END = "isEnd";
     /**
      * 创建敏感词树
      * dfaMap 的值变化机制：
@@ -59,6 +59,28 @@ public class DFAUtil {
         }
     }
 
+    /**
+     * 基于敏感词树，返回文本中含有的敏感词
+     * @return
+     */
+    public static Set<String> getDirtyWords(String text) {
+        char[] chars = text.toCharArray();
+        Set<String> dirtyWords = new HashSet<>();
+        Map curMap;
+        for (char aChar : chars) {
+            if (!dfaMap.containsKey(aChar)) {
+                continue;
+            }
+            Map wordValueMap = (Map) dfaMap.get(aChar);
+            if (wordValueMap.get(IS_END).equals("0")) {
+                // 匹配下一个
+            } else {
+                dirtyWords.add()
+            }
+            curMap = wordValueMap;
+        }
+    }
+
     public static void main(String[] args) {
         DFAUtil dfaUtil = new DFAUtil();
         Set<String> dirtyWords = new HashSet<>();
@@ -69,6 +91,9 @@ public class DFAUtil {
         dfaUtil.createDfaMap(dirtyWords);
 
         System.out.println(dfaMap);
+
+        String text = "你三胖啊山炮";
+        getDirtyWords(text);
     }
 
 }
