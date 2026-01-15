@@ -61,7 +61,7 @@ public class PhaseFilterImpl implements ChainFilter {
         if (StringUtils.isBlank(mobileInfo)) {
             // 调用第三方接口查询
             mobileInfo = mobileOperatorUtil.getMobileOperator(mobile);
-            // 如果查到了发送消息到mq，其他模块监听，将其保存到mysql 及redis中
+            // 如果查到了 发送消息到mq，其他模块监听，将其保存到mysql 及redis中
             rabbitTemplate.convertAndSend(RabbitMQConstants.MOBILE_AREA_OPERATOR,mobileInfo+SEPARATE+mobile);
         }
         if (StringUtils.isBlank(mobileInfo)) {

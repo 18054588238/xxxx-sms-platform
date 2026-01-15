@@ -9,6 +9,7 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
@@ -47,7 +48,11 @@ public class ChainFilterContext {
             for (String word : words) {
                 ChainFilter chainFilter = chainFilterMap.get(word);
                 if (Objects.nonNull(chainFilter)) {
-                    chainFilter.check(submit);
+                    try {
+                        chainFilter.check(submit);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
                 }
             }
         }

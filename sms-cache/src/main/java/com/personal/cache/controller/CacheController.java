@@ -4,6 +4,7 @@ import com.msb.framework.redis.RedisClient;
 import com.personal.cache.model.TestUser;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.LinkedHashSet;
@@ -75,6 +76,15 @@ public class CacheController {
                 operations.opsForValue().set(k,v);
             });
         });
+    }
+
+    @PostMapping("/setAndInnerStr")
+    Set<Object> setAndInnerStr(@RequestParam String key, @RequestParam String dirtyWordKey,@RequestBody String... values) {
+        // 存储短信分词后的数据
+        redisClient.sAdd(key,values);
+        Set<Object> objects = redisClient.sIntersect(key, dirtyWordKey);
+        redisClient.delete(key);
+        return objects;
     }
 
     @PostMapping("/setValue")

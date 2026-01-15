@@ -2,6 +2,8 @@ package com.personal.strategy.feign;
 
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Map;
@@ -27,4 +29,8 @@ public interface CacheFeignClient {
 
     @GetMapping("/cache/get")
     String get(@RequestParam String key);
+
+    @PostMapping("/cache/setAndInnerStr")
+    Set<Object> setAndInnerStr(@RequestParam String key, @RequestParam String dirtyWordKey,@RequestBody String... values);
+
 }
