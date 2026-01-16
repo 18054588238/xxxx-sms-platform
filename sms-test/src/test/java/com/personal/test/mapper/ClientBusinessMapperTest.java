@@ -34,7 +34,23 @@ class ClientMapperTest {
     private MobileAreaMapper mobileAreaMapper;
     @Autowired
     private MobileDirtyWordMapper dirtyWordMapper;
+    @Autowired
+    private MobileBlackMapper mobileBlackMapper;
 
+    @Test
+    void setMobileBlackToRedis() {
+        List<MobileBlack> mobileBlackList = mobileBlackMapper.getMobileBlackList();
+        for (MobileBlack mobileBlack : mobileBlackList) {
+            // 黑名单类型 0-全局黑名单  其他-客户黑名单
+            if(mobileBlack.getClientId() == 0){
+                // 平台级别的黑名单   black:手机号   作为key
+                cacheFeignClient.setValue("black:" + mobileBlack.getBlackNumber(),"1");
+            }else{
+                // 客户级别的黑名单   black:clientId:手机号
+                cacheFeignClient.setValue("black:" + mobileBlack.getClientId() + ":" +mobileBlack.getBlackNumber(),"1");
+            }
+        }
+    }
     @Test
     void setDirtyWordTest() {
         List<String> dirtyWord = dirtyWordMapper.getDirtyWord();
@@ -48,7 +64,7 @@ class ClientMapperTest {
         // 这里需要注册JavaTimeModule
         objectMapper.registerModule(new JavaTimeModule());
         Map map = objectMapper.readValue(objectMapper.writeValueAsString(clientBusiness), Map.class);
-        cacheFeignClient.setMap("client_business:"+clientBusiness.getApikey(),
+        cacheFeignClient.setHMap("client_business:"+clientBusiness.getApikey(),
                 map);
         System.out.println(clientBusiness);
     }

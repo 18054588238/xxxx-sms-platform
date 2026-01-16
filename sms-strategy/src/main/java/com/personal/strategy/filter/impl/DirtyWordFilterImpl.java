@@ -5,12 +5,16 @@ import com.personal.common.constants.RabbitMQConstants;
 import com.personal.common.constants.SmsConstant;
 import com.personal.common.enums.ExceptionEnums;
 import com.personal.common.exception.StrategyException;
+import com.personal.common.model.StandardReport;
 import com.personal.common.model.StandardSubmit;
+import com.personal.common.utils.MapStructUtil;
 import com.personal.strategy.feign.CacheFeignClient;
 import com.personal.strategy.filter.ChainFilter;
 import com.personal.strategy.utils.DFAUtil;
+import com.personal.strategy.utils.ErrorSendMsgUtil;
 import com.personal.strategy.utils.HutoolDFAUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -38,7 +42,7 @@ import java.util.UUID;
 public class DirtyWordFilterImpl implements ChainFilter {
 
     @Autowired
-    private RabbitTemplate rabbitTemplate;
+    private ErrorSendMsgUtil errorSendMsgUtil;
 
     @Override
     public void check(StandardSubmit submit) {
@@ -49,11 +53,12 @@ public class DirtyWordFilterImpl implements ChainFilter {
         if (dirtyWords != null && !dirtyWords.isEmpty()) {
             // 说明有敏感词
             log.info("【策略模块-敏感词校验】   短信内容包含敏感词信息， dirtyWords = {}",dirtyWords);
-            // 校验失败，发送消息到rabbitmq
-            submit.setReportState(SmsConstant.REPORT_STATE_FAIL);
-            submit.setErrorMsg(ExceptionEnums.HAS_DIRTY_WORD.getMessage()+",dirtyWords ="+dirtyWords.toString());
+            /*日志信息*/
+            errorSendMsgUtil.sendWriteLog(submit, dirtyWords);
 
-            rabbitTemplate.convertAndSend(RabbitMQConstants.SMS_WRITE_LOG,submit);
+            /* 发送状态报告 */
+            errorSendMsgUtil.sendPushReport(submit);
+
             // 抛出异常
             throw new StrategyException(ExceptionEnums.HAS_DIRTY_WORD);
         }

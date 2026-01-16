@@ -34,14 +34,15 @@ public class ChainFilterContext {
 
     public void checkManagement(StandardSubmit submit) {
         // 从缓存中获取需要校验的信息
-        Set<Map> sMember = cacheFeignClient.getSMember(CacheConstant.CLIENT_BUSINESS + submit.getApikey());
+        /*Set<Map> sMember = cacheFeignClient.getSMember(CacheConstant.CLIENT_BUSINESS + submit.getApikey());
         if (Objects.isNull(sMember) || sMember.isEmpty()) {
             return;
         }
         String checkWords = "";
         for (Map map : sMember) {
             checkWords = (String) map.get(CLIENT_FILTERS);
-        }
+        }*/
+        String checkWords = cacheFeignClient.getFieldValueString(CacheConstant.CLIENT_BUSINESS + submit.getApikey(), CLIENT_FILTERS);
 
         if (StringUtils.isNotBlank(checkWords)) {
             String[] words = checkWords.split(",");
@@ -51,6 +52,7 @@ public class ChainFilterContext {
                     try {
                         chainFilter.check(submit);
                     } catch (IOException e) {
+
                         throw new RuntimeException(e);
                     }
                 }

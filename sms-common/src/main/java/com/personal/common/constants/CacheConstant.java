@@ -7,10 +7,12 @@ package com.personal.common.constants;
  * @Description
  */
 public interface CacheConstant {
-    public static final String CLIENT_SIGN = "client_sign:";
-    public static final String CLIENT_BUSINESS = "client_business:";
-    public static final String CLIENT_TEMPLATE = "client_template:";
-    public static final String CLIENT_BALANCE = "client_balance:";
-    public static final String MOBILE_PHASE = "phase:";
-    public static final String DIRTY_WORD = "dirtyWord";
+    String CLIENT_SIGN = "client_sign:";
+    String CLIENT_BUSINESS = "client_business:";
+    String CLIENT_TEMPLATE = "client_template:";
+    String CLIENT_BALANCE = "client_balance:";
+    String MOBILE_PHASE = "phase:";
+    String DIRTY_WORD = "dirtyWord";
+    String MOBILE_BLACK = "mobile_black:";
+    String SEPARATE = ":";
 }

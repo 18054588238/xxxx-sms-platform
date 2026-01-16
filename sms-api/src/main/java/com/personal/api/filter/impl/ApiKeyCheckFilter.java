@@ -30,13 +30,14 @@ public class ApiKeyCheckFilter implements ChainFilter {
         log.info("[接口模块-校验apikey。。。]");
         String apikey = submit.getApikey();
         // 根据apikey查询redis，如果查不到，抛出异常，查到之后封装信息
-        Map<String, Object> value = cacheFeignClient.getMap(CacheConstant.CLIENT_BUSINESS +apikey);
+//        Map<String, Object> value = cacheFeignClient.getMap(CacheConstant.CLIENT_BUSINESS +apikey);
 
-        if(value==null || value.isEmpty()){
+        String value = cacheFeignClient.getFieldValueString(CacheConstant.CLIENT_BUSINESS + apikey,"id");
+        if(value==null){
             log.error("【接口模块-校验apikey】 非法的apikey = {}",apikey);
             throw new ApiException(ExceptionEnums.ERROR_APIKEY);
         }
-        submit.setClientId(Long.parseLong(value.get("id") + ""));
+        submit.setClientId(Long.parseLong(value));
         log.info("【接口模块-校验apikey】 查询到客户信息 value = {}",value);
     }
 }

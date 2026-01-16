@@ -35,6 +35,11 @@ public class RabbitMQConfig {
     }
 
     @Bean
+    public Queue smsPushReportQueue() {
+        return QueueBuilder.durable(RabbitMQConstants.SMS_PUSH_REPORT).build();
+    }
+
+    @Bean
     public RabbitTemplate rabbitTemplate(ConnectionFactory connectionFactory) {
         RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);
         // 配置confirm和return机制，用于确保消息可靠地发送到RabbitMQ

@@ -1,13 +1,21 @@
 package com.personal.strategy.listener;
 
+import com.personal.common.constants.CacheConstant;
 import com.personal.common.constants.RabbitMQConstants;
+import com.personal.common.constants.SmsConstant;
+import com.personal.common.enums.ExceptionEnums;
 import com.personal.common.exception.StrategyException;
+import com.personal.common.model.StandardReport;
 import com.personal.common.model.StandardSubmit;
+import com.personal.common.utils.MapStructUtil;
+import com.personal.strategy.feign.CacheFeignClient;
 import com.personal.strategy.filter.ChainFilterContext;
 import com.rabbitmq.client.Channel;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -36,6 +44,12 @@ public class PreSendListener {
 
     @Autowired
     private ChainFilterContext chainFilterContext;
+    @Autowired
+    private RabbitTemplate rabbitTemplate;
+    @Autowired
+    private CacheFeignClient cacheFeignClient;
+    @Autowired
+    private MapStructUtil mapStructUtil;
 
     @RabbitListener(queues = RabbitMQConstants.SMS_PRE_SEND)
     public void preSend(StandardSubmit submit, Message message, Channel channel) throws IOException { // 获取发送的数据

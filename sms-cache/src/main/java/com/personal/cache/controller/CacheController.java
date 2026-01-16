@@ -102,6 +102,7 @@ public class CacheController {
     @PostMapping("/setMaps")
     public void setMap(@RequestParam String key,@RequestBody Map<String,Object> ... value) {
         redisClient.sAdd(key,value);
+
         log.info("setMap:{}",value);
     }
 
