@@ -13,6 +13,7 @@ public interface CacheConstant {
     String CLIENT_BALANCE = "client_balance:";
     String MOBILE_PHASE = "phase:";
     String DIRTY_WORD = "dirtyWord";
-    String MOBILE_BLACK = "mobile_black:";
+    String MOBILE_BLACK = "black:";
     String SEPARATE = ":";
+    String TRANSFER = "transfer:";
 }

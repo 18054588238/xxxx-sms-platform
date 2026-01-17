@@ -36,6 +36,17 @@ class ClientMapperTest {
     private MobileDirtyWordMapper dirtyWordMapper;
     @Autowired
     private MobileBlackMapper mobileBlackMapper;
+    @Autowired
+    private MobileTransferMapper mobileTransferMapper;
+
+
+    @Test
+    void setMobileTransfer() {
+        List<MobileTransfer> data = mobileTransferMapper.getMobileTransfer();
+        for (MobileTransfer transfer : data) {
+            cacheFeignClient.setValue("transfer:"+transfer.getTransferNumber(),transfer.getNowIsp());
+        }
+    }
 
     @Test
     void setMobileBlackToRedis() {

@@ -54,7 +54,8 @@ public class DirtyWordFilterImpl implements ChainFilter {
             // 说明有敏感词
             log.info("【策略模块-敏感词校验】   短信内容包含敏感词信息， dirtyWords = {}",dirtyWords);
             /*日志信息*/
-            errorSendMsgUtil.sendWriteLog(submit, dirtyWords);
+            submit.setErrorMsg(ExceptionEnums.HAS_DIRTY_WORD.getMessage()+",dirtyWords ="+ dirtyWords.toString());
+            errorSendMsgUtil.sendWriteLog(submit);
 
             /* 发送状态报告 */
             errorSendMsgUtil.sendPushReport(submit);

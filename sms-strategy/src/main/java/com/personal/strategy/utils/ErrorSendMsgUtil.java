@@ -46,11 +46,9 @@ public class ErrorSendMsgUtil {
         }
     }
 
-    public void sendWriteLog(StandardSubmit submit, List<String> dirtyWords) {
+    public void sendWriteLog(StandardSubmit submit) {
         // 校验失败，发送消息到rabbitmq，记录日志
         submit.setReportState(SmsConstant.REPORT_STATE_FAIL);
-        submit.setErrorMsg(ExceptionEnums.HAS_DIRTY_WORD.getMessage()+",dirtyWords ="+ dirtyWords.toString());
-
         rabbitTemplate.convertAndSend(RabbitMQConstants.SMS_WRITE_LOG, submit);
     }
 }

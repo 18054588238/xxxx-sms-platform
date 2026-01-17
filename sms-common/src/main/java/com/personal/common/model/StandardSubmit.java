@@ -108,4 +108,7 @@ public class StandardSubmit implements Serializable {
 
     private Long signId;
 
+    // 是否是携号转网
+    private Boolean isTransfer = false;
+
 }

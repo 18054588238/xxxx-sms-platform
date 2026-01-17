@@ -19,7 +19,9 @@ public enum ExceptionEnums {
     PARAMETER_ERROR(-10,"参数不合法"),
     SNOWFLAKE_OUT_OF_RANGE(-11,"机器id或服务id超过最大范围值"),
     SNOWFLAKE_TIME_BACK(-12,"当前服务出现时间回拨"),
-    HAS_DIRTY_WORD(-13,"短信内容含有敏感词");
+    HAS_DIRTY_WORD(-13,"短信内容含有敏感词"),
+    BLACK_CLIENT(-14,"当前手机号为客户级黑名单"),
+    BLACK_GLOBAL(-15,"当前手机号为平台级黑名单");
 
     private Integer code;
     private String message;
