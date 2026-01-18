@@ -24,6 +24,25 @@ public class CacheController {
     @Autowired
     private RedisClient redisClient;
 
+    /**
+     * 使用zSet结构实现短信限流操作，key：客户标记和手机号，value和score：当前系统时间的毫秒值
+     * score 可以重复，但成员不能重复
+     */
+    @PostMapping("/zAdd")
+    public Boolean zAdd(@RequestParam String key, @RequestParam Object member,@RequestParam Long score) {
+        log.info("zAdd,有序集合的key:{},要添加的成员member:{},成员的分数score:{}",key,member,score);
+        // 将成员v及其分数score添加到键为key的有序集合中。如果成员已存在，则更新其分数。
+        return redisClient.zAdd(key,member,score);
+    }
+
+    /**
+     * 使用zSet结构实现短信限流操作，例如：限制1min只能发一条，如果在1min的score区间中查询到了2条数据，则不允许发送
+     */
+    @GetMapping("/getScoreCount")
+    public Long getScoreCount(@RequestParam String key,@RequestParam Double minScore,@RequestParam Double maxScore) {
+        // 统计ZSet（有序集合）中分数在指定范围内的成员数量的方法,默认包含边界
+        return redisClient.zCount(key,minScore,maxScore); // 如果key不存在，count会返回0
+    }
 
     @GetMapping("/getMap")
     Map<String,Object> getMap(@RequestParam String key) {

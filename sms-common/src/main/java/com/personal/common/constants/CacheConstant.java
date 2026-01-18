@@ -16,4 +16,5 @@ public interface CacheConstant {
     String MOBILE_BLACK = "black:";
     String SEPARATE = ":";
     String TRANSFER = "transfer:";
+    String LIMIT_MINUTES = "limit_minutes:";
 }

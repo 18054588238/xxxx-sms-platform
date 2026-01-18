@@ -21,7 +21,9 @@ public enum ExceptionEnums {
     SNOWFLAKE_TIME_BACK(-12,"当前服务出现时间回拨"),
     HAS_DIRTY_WORD(-13,"短信内容含有敏感词"),
     BLACK_CLIENT(-14,"当前手机号为客户级黑名单"),
-    BLACK_GLOBAL(-15,"当前手机号为平台级黑名单");
+    BLACK_GLOBAL(-15,"当前手机号为平台级黑名单"),
+    ONE_MINUTE_LIMIT(-16,"操作频繁，60s内只能发送一条短信，请稍后发送～"),
+    ;
 
     private Integer code;
     private String message;

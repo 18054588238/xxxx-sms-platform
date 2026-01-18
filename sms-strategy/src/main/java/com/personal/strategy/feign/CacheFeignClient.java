@@ -39,4 +39,10 @@ public interface CacheFeignClient {
     @PostMapping("/cache/setAndInnerStr")
     Set<Object> setAndInnerStr(@RequestParam String key, @RequestParam String dirtyWordKey,@RequestBody String... values);
 
+    @PostMapping("/cache/zAdd")
+    Boolean zAdd(@RequestParam String key, @RequestParam Object member,@RequestParam Long score);
+
+    @GetMapping("/cache/getScoreCount")
+    Long getScoreCount(@RequestParam String key,@RequestParam Double minScore,@RequestParam Double maxScore);
+
 }
