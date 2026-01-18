@@ -11,4 +11,7 @@ public interface SmsConstant {
     int REPORT_STATE_SUCCESS = 1;
     // 短信发送失败
     int REPORT_STATE_FAIL = 2;
+    int CODE_TYPE = 0;
+    int NOTIFY_TYPE = 1;
+    int MARKET_TYPE = 2;
 }

@@ -23,6 +23,7 @@ public enum ExceptionEnums {
     BLACK_CLIENT(-14,"当前手机号为客户级黑名单"),
     BLACK_GLOBAL(-15,"当前手机号为平台级黑名单"),
     ONE_MINUTE_LIMIT(-16,"操作频繁，60s内只能发送一条短信，请稍后发送～"),
+    ONE_HOUR_LIMIT(-17,"操作频繁，1h内只能发送三条短信，请稍后发送～"),
     ;
 
     private Integer code;

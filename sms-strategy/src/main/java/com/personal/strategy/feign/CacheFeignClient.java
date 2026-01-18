@@ -1,10 +1,7 @@
 package com.personal.strategy.feign;
 
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 import java.util.Set;
@@ -45,4 +42,9 @@ public interface CacheFeignClient {
     @GetMapping("/cache/getScoreCount")
     Long getScoreCount(@RequestParam String key,@RequestParam Double minScore,@RequestParam Double maxScore);
 
+    @DeleteMapping("/cache/zRemoveRange")
+    public void zRemoveRange(@RequestParam String key, @RequestParam long start,@RequestParam long end);
+
+    @DeleteMapping("/cache/zRemove")
+    public void zRemove(@RequestParam String key,@RequestParam Object member);
 }

@@ -1,6 +1,7 @@
 package com.personal.strategy.filter.impl;
 
 import com.personal.common.constants.CacheConstant;
+import com.personal.common.constants.SmsConstant;
 import com.personal.common.enums.ExceptionEnums;
 import com.personal.common.exception.StrategyException;
 import com.personal.common.model.StandardSubmit;
@@ -36,7 +37,10 @@ public class OneMinuteLimitFilterImpl implements ChainFilter {
 
     @Override
     public void check(StandardSubmit submit) throws IOException {
-        log.info("【策略模块-短信发送限流校验】校验ing…………");
+        if (submit.getState() != SmsConstant.CODE_TYPE) {
+            return;
+        }
+        log.info("【策略模块-短信发送60s限流校验】60s校验ing…………");
 
         String mobile = submit.getMobile();
         Long clientId = submit.getClientId();
@@ -51,7 +55,7 @@ public class OneMinuteLimitFilterImpl implements ChainFilter {
         Boolean b = cacheFeignClient.zAdd(zAddKey , sendMillis, sendMillis);
         if (!b) {
             // member值相同，添加失败，会更新score值，说明存在并发操作
-            log.info("【策略模块-短信发送限流校验】操作频繁，60s内只能发送一条短信，请稍后发送～");
+            log.info("【策略模块-短信发送60s限流校验】操作频繁，60s内只能发送一条短信，请稍后发送～");
             submit.setErrorMsg(ExceptionEnums.ONE_MINUTE_LIMIT.getMessage()+",mobile:"+mobile);
             errorSendMsgUtil.sendWriteLog(submit);
             errorSendMsgUtil.sendPushReport(submit);
@@ -62,12 +66,14 @@ public class OneMinuteLimitFilterImpl implements ChainFilter {
         Long scoreCount = cacheFeignClient.getScoreCount(zAddKey, (double) min, (double) sendMillis);
         if (scoreCount > 1) {
             // 说明60s内发送的短信数大于1了
-            log.info("【策略模块-短信发送限流校验】操作频繁，60s内只能发送一条短信，请稍后发送～");
+            log.info("【策略模块-短信发送60s限流校验】操作频繁，60s内只能发送一条短信，请稍后发送～");
+            // 移除，该时间范围内只保留1条
+            cacheFeignClient.zRemove(zAddKey, sendMillis);
             submit.setErrorMsg(ExceptionEnums.ONE_MINUTE_LIMIT.getMessage()+",mobile:"+mobile);
             errorSendMsgUtil.sendWriteLog(submit);
             errorSendMsgUtil.sendPushReport(submit);
             throw new StrategyException(ExceptionEnums.ONE_MINUTE_LIMIT);
         }
-        log.info("【策略模块-短信发送限流校验】短信60s限流校验通过");
+        log.info("【策略模块-短信发送60s限流校验】短信60s限流校验通过");
     }
 }

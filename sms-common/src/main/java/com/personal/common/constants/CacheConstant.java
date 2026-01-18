@@ -17,4 +17,5 @@ public interface CacheConstant {
     String SEPARATE = ":";
     String TRANSFER = "transfer:";
     String LIMIT_MINUTES = "limit_minutes:";
+    String LIMIT_HOURS = "limit_hours:";
 }

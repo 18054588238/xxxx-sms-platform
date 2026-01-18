@@ -111,4 +111,7 @@ public class StandardSubmit implements Serializable {
     // 是否是携号转网
     private Boolean isTransfer = false;
 
+    // 短信发送时间的毫秒值 - 限流操作的重试机制
+    private long retrySendTime;
+
 }

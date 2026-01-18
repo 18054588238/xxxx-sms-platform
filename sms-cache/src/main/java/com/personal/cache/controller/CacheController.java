@@ -5,6 +5,7 @@ import com.personal.cache.model.TestUser;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.LinkedHashSet;
@@ -23,6 +24,19 @@ import java.util.Set;
 public class CacheController {
     @Autowired
     private RedisClient redisClient;
+
+    @DeleteMapping("/zRemoveRange")
+    public void zRemoveRange(@RequestParam String key, @RequestParam long start,@RequestParam long end) {
+        log.info("zRemoveRange,有序集合的key:{},移除范围{}-{}",key,start,end);
+        // zSet默认是按照分数（score）升序排列的。
+        redisClient.zRemoveRange(key,start,end);
+    }
+
+    @DeleteMapping("/zRemove")
+    public void zRemove(@RequestParam String key,@RequestParam Object member) {
+        log.info("zRemove,有序集合的key:{},移除值{}",key,member);
+        redisClient.zRemove(key,member);
+    }
 
     /**
      * 使用zSet结构实现短信限流操作，key：客户标记和手机号，value和score：当前系统时间的毫秒值
