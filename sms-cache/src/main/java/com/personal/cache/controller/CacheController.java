@@ -25,6 +25,16 @@ public class CacheController {
     @Autowired
     private RedisClient redisClient;
 
+    @GetMapping("/getFeeIncreBy")
+    public Long getFeeWithIncrementBy(@RequestParam String hashMapName,
+                                      @RequestParam String key,
+                                      @RequestParam long delta) {
+        log.info("【缓存模块】 hIncrBy方法，自增   key = {},field = {}，number = {}", hashMapName,key,delta);
+        Long fee = redisClient.hIncrementBy(hashMapName, key, delta);
+        log.info("更新后 fee = {}",fee);
+        return fee;
+    }
+
     @DeleteMapping("/zRemoveRange")
     public void zRemoveRange(@RequestParam String key, @RequestParam long start,@RequestParam long end) {
         log.info("zRemoveRange,有序集合的key:{},移除范围{}-{}",key,start,end);

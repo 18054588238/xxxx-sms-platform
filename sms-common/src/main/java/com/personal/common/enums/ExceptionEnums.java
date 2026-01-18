@@ -15,7 +15,7 @@ public enum ExceptionEnums {
     ERROR_SIGN(-3,"无可用签名"),
     ERROR_TEMPLATE(-4,"无可用模板"),
     ERROR_MOBILE(-5,"手机号格式不正确"),
-    BALANCE_NOT_ENOUGH(-6,"手客户余额不足"),
+    BALANCE_NOT_ENOUGH(-6,"客户余额不足"),
     PARAMETER_ERROR(-10,"参数不合法"),
     SNOWFLAKE_OUT_OF_RANGE(-11,"机器id或服务id超过最大范围值"),
     SNOWFLAKE_TIME_BACK(-12,"当前服务出现时间回拨"),

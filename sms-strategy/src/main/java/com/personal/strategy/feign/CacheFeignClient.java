@@ -47,4 +47,9 @@ public interface CacheFeignClient {
 
     @DeleteMapping("/cache/zRemove")
     public void zRemove(@RequestParam String key,@RequestParam Object member);
+
+    @GetMapping("/cache/getFeeIncreBy")
+    public Long getFeeWithIncrementBy(@RequestParam String hashMapName,
+                                      @RequestParam String key,
+                                      @RequestParam long delta);
 }
