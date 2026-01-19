@@ -50,13 +50,13 @@
         <type>pom</type>
         <scope>import</scope>
       </dependency>
-      <!--<dependency>
+      <dependency>
         <groupId>com.msb.cloud</groupId>
         <artifactId>horse-framework-starters</artifactId>
         <version>${horse-version}</version>
         <type>pom</type>
         <scope>import</scope>
-      </dependency>-->
+      </dependency>
     </dependencies>
   </dependencyManagement>
 

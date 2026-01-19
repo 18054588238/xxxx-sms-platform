@@ -22,8 +22,8 @@ import java.time.ZoneOffset;
  * @Date 2026/1/18
  * @Description 同一个客户平台，同一个手机号60s内只能发送一条
  */
-//@Service(value = "oneHourLimit") todo
-@Service
+@Service(value = "oneHourLimit")
+//@Service
 @Slf4j
 public class OneHourLimitFilterImpl implements ChainFilter {
 

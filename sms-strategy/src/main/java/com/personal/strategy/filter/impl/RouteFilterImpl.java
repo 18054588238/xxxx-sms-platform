@@ -89,7 +89,7 @@ public class RouteFilterImpl implements ChainFilter {
             // 校验通过
             isSuccess = true;
             // 封装信息
-            submit.setChannelId((Long) channelMap.get("id"));
+            submit.setChannelId(Long.parseLong(channelMap.get("id")+""));
             submit.setSrcNumber(""+selectedChannel.get("channelNumber") + map.get("clientChannelNumber"));
 
             break;
@@ -107,6 +107,7 @@ public class RouteFilterImpl implements ChainFilter {
             String queueName = RabbitMQConstants.SMS_GATEWAY + submit.getChannelId(); // 队列名称
             amqpAdmin.declareQueue(QueueBuilder.durable(queueName).build()); // 构建队列
             rabbitTemplate.convertAndSend(queueName,submit);
+            log.info("【策略模块-路由校验】校验成功！");
         } catch (AmqpException e) {
             log.info("【策略模块-路由校验】声明通道队列队列以及发送消息出现问题，client_id = {}",clientId);
             submit.setErrorMsg(e.getMessage());
