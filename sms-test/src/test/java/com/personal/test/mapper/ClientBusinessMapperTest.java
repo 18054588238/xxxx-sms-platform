@@ -38,7 +38,40 @@ class ClientMapperTest {
     private MobileBlackMapper mobileBlackMapper;
     @Autowired
     private MobileTransferMapper mobileTransferMapper;
+    @Autowired
+    private ClientChannelMapper clientChannelMapper;
+    @Autowired
+    private ChannelMapper channelMapper;
 
+
+    @Test
+    void setChannel() throws JsonProcessingException {
+        List<Channel> channels = channelMapper.findAll();
+        for (Channel channel : channels) {
+            ObjectMapper objectMapper = new ObjectMapper();
+            objectMapper.registerModule(new JavaTimeModule());
+            Map map = objectMapper.readValue(objectMapper.writeValueAsString(channel), Map.class);
+            // hSet --- redisTemplate.opsForHash().putAll(name, map)
+            /*
+            * 适合存储一个对象的多个属性，每个属性作为Hash的一个field
+            * */
+            cacheFeignClient.setHMap("channel:"+channel.getId(),map);
+        }
+    }
+
+    @Test
+    void setClientChannel() throws JsonProcessingException {
+        List<ClientChannel> clientChannels = clientChannelMapper.findAll();
+        for (ClientChannel clientChannel : clientChannels) {
+            // sAdd --- redisTemplate.opsForSet().add(key, values)
+            /*
+            * 向Redis的Set数据结构中添加一个或多个成员
+            * */
+            ObjectMapper objectMapper = new ObjectMapper().registerModule(new JavaTimeModule());
+            Map map = objectMapper.readValue(objectMapper.writeValueAsString(clientChannel), Map.class);
+            cacheFeignClient.setMap("client_channel:"+clientChannel.getClientId(),map);
+        }
+    }
 
     @Test
     void setMobileTransfer() {

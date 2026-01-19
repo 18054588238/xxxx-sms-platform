@@ -18,4 +18,6 @@ public interface CacheConstant {
     String TRANSFER = "transfer:";
     String LIMIT_MINUTES = "limit_minutes:";
     String LIMIT_HOURS = "limit_hours:";
+    String CLIENT_CHANNEL = "client_channel:";
+    String CHANNEL = "channel:";
 }
