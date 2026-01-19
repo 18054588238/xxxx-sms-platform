@@ -1,13 +1,19 @@
 package com.personal.strategy.filter.impl;
 
 import com.personal.common.constants.CacheConstant;
+import com.personal.common.constants.RabbitMQConstants;
 import com.personal.common.enums.ExceptionEnums;
 import com.personal.common.exception.StrategyException;
 import com.personal.common.model.StandardSubmit;
 import com.personal.strategy.feign.CacheFeignClient;
 import com.personal.strategy.filter.ChainFilter;
 import com.personal.strategy.utils.ErrorSendMsgUtil;
+import com.rabbitmq.client.AMQP;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.amqp.AmqpException;
+import org.springframework.amqp.core.AmqpAdmin;
+import org.springframework.amqp.core.QueueBuilder;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.personal.strategy.utils.ChannelTransferUtil;
@@ -30,6 +36,22 @@ public class RouteFilterImpl implements ChainFilter {
     private CacheFeignClient cacheFeignClient;
     @Autowired
     private ErrorSendMsgUtil errorSendMsgUtil;
+    // 用于管理AMQP资源（如队列、交换器、绑定等）
+    @Autowired
+    private AmqpAdmin amqpAdmin;
+    // 用于发送和接收消息。
+    @Autowired
+    private RabbitTemplate rabbitTemplate;
+
+    /* AmqpAdmin 和 RabbitTemplate 的关系
+    * 功能互补：AmqpAdmin用于管理AMQP资源，而RabbitTemplate用于消息的发送和接收。
+    *         通常，在应用程序启动时，我们会使用AmqpAdmin来声明所需的队列、交换器和绑定，然后使用RabbitTemplate来进行消息操作。
+    * 依赖关系：在Spring配置中，我们通常会同时配置这两个Bean。
+    *         RabbitTemplate需要知道连接工厂，而AmqpAdmin（RabbitAdmin）也是基于连接工厂的。
+    *         但是，它们之间没有直接的依赖关系，而是通过连接工厂与RabbitMQ服务器交互。
+    * 使用场景：在应用程序启动阶段，我们可能使用AmqpAdmin来声明队列和交换器，确保它们存在。
+    *         在业务逻辑中，我们使用RabbitTemplate来发送消息到这些交换器或从队列中接收消息。
+    * */
 
     @Override
     public void check(StandardSubmit submit) {
@@ -47,8 +69,6 @@ public class RouteFilterImpl implements ChainFilter {
 
         boolean isSuccess = false;
 
-        Map selectedChannel;
-
         for (Map map : mapTreeSet) {
             // 判断是否可用
             if (!((Boolean) map.get("available"))) {
@@ -65,10 +85,14 @@ public class RouteFilterImpl implements ChainFilter {
                 continue;
             }
             // 如果后期涉及到的通道的转换，这里留一个口子
-            selectedChannel = ChannelTransferUtil.transfer(submit, channelMap);
-
+            Map selectedChannel = ChannelTransferUtil.transfer(submit, channelMap);
             // 校验通过
             isSuccess = true;
+            // 封装信息
+            submit.setChannelId((Long) channelMap.get("id"));
+            submit.setSrcNumber(""+selectedChannel.get("channelNumber") + map.get("clientChannelNumber"));
+
+            break;
         }
         if (!isSuccess) {
             log.info("【策略模块-路由校验】当前客户没有匹配的路由通道，client_id = {}",clientId);
@@ -77,5 +101,19 @@ public class RouteFilterImpl implements ChainFilter {
             errorSendMsgUtil.sendPushReport(submit);
             throw new StrategyException(ExceptionEnums.NO_ROUTE_CHANNEL);
         }
+
+        try {
+            // 构建动态队列并发送消息到队列中
+            String queueName = RabbitMQConstants.SMS_GATEWAY + submit.getChannelId(); // 队列名称
+            amqpAdmin.declareQueue(QueueBuilder.durable(queueName).build()); // 构建队列
+            rabbitTemplate.convertAndSend(queueName,submit);
+        } catch (AmqpException e) {
+            log.info("【策略模块-路由校验】声明通道队列队列以及发送消息出现问题，client_id = {}",clientId);
+            submit.setErrorMsg(e.getMessage());
+            errorSendMsgUtil.sendWriteLog(submit);
+            errorSendMsgUtil.sendPushReport(submit);
+            throw new StrategyException(e.getMessage(),ExceptionEnums.UNKNOWN_ERROR.getCode());
+        }
+
     }
 }

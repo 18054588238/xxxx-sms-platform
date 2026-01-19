@@ -31,7 +31,7 @@
     <horse-version>1.0.0</horse-version>
   </properties>
 
-  <!--用于声明依赖，但不实际引入-->
+  <!-- dependencyManagement 用于声明依赖，但不实际引入 -->
   <dependencyManagement>
     <dependencies>
 
@@ -50,13 +50,13 @@
         <type>pom</type>
         <scope>import</scope>
       </dependency>
-      <dependency>
+      <!--<dependency>
         <groupId>com.msb.cloud</groupId>
         <artifactId>horse-framework-starters</artifactId>
         <version>${horse-version}</version>
         <type>pom</type>
         <scope>import</scope>
-      </dependency>
+      </dependency>-->
     </dependencies>
   </dependencyManagement>
 

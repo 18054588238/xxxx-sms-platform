@@ -10,6 +10,7 @@ import lombok.Getter;
  */
 @Getter
 public enum ExceptionEnums {
+    UNKNOWN_ERROR(-999,"系统未知错误"),
     ERROR_APIKEY(-1,"非法的apikey"),
     IP_NOT_WHITE(-2,"请求的ip不在白名单内"),
     ERROR_SIGN(-3,"无可用签名"),

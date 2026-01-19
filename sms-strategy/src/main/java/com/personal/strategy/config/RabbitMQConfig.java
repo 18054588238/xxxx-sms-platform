@@ -16,6 +16,10 @@ import org.springframework.context.annotation.Configuration;
  * @Author liupanpan
  * @Date 2026/1/11
  * @Description 配置队列和交换机信息
+ * Spring Boot 自动配置了：
+ * 1.ConnectionFactory
+ * 2.RabbitAdmin(AmqpAdmin)
+ * 3.RabbitTemplate(已设置admin)
  */
 @Configuration
 @Slf4j
@@ -24,6 +28,7 @@ public class RabbitMQConfig {
      * 接口模块发送消息到策略模块的队列
      * 只是告诉 RabbitMQ 要创建这个队列，但消息发送时需要指定交换机和路由键
      */
+    // Spring会自动通过RabbitAdmin声明这个队列
     @Bean
     public Queue preSendQueue() {
         return QueueBuilder.durable(RabbitMQConstants.MOBILE_AREA_OPERATOR).build();
