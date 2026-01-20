@@ -12,6 +12,7 @@
     <module>sms-cache</module>
     <module>sms-test</module>
     <module>sms-strategy</module>
+    <module>sms-search</module>
   </modules> <!--表示一个父项目（或者聚合项目）-->
 
   <parent>
