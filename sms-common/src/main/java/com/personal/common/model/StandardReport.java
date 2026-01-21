@@ -55,4 +55,6 @@ public class StandardReport implements Serializable {
     private Integer isCallback;
     // 回调地址 - 发送状态报告地址
     private String callbackUrl;
+    // 重试次数
+    private int reSendCount = 0;
 }
