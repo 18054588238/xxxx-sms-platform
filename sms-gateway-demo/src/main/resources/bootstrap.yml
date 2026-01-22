@@ -10,3 +10,9 @@ spring:
       config: # nacos配置中心地址
         server-addr: 172.16.30.198:8848
         file-extension: yml
+#  rabbitmq: # 已放到nacos中
+#    listener:
+#      simple: # 全局配置：设置并行的线程数以及每个消息一次性拉取多少条消息
+#        acknowledge-mode: manual # 开启手动ack
+#        concurrency: 10 # 消费者中并行的线程数
+#        prefetch: 50 # 每个线程一次性最多拉取的消息个数，默认是250，可减少网络IO次数
