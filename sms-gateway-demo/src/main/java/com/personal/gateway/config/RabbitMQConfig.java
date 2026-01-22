@@ -16,17 +16,17 @@ import org.springframework.context.annotation.Configuration;
  * 在消费是指定containerFactory
  * 例如：@RabbitListener(queues = "${gateway.sendtopic}",containerFactory = "gatewayContainerFactory")
  */
-@Configuration
+//@Configuration
 public class RabbitMQConfig {
 
-    @Bean
+//    @Bean
     public SimpleRabbitListenerContainerFactory gatewayContainerFactory(SimpleRabbitListenerContainerFactoryConfigurer configurer,
                                                                         ConnectionFactory connectionFactory) {
 
         SimpleRabbitListenerContainerFactory listenerContainerFactory = new SimpleRabbitListenerContainerFactory();
 
-        listenerContainerFactory.setConcurrentConsumers(10); // 消费者中并行的线程数
-        listenerContainerFactory.setPrefetchCount(50); // 每个线程一次性最多拉取的消息个数，默认是250，可减少网络IO次数
+        listenerContainerFactory.setConcurrentConsumers(5); // 消费者中并行的线程数
+        listenerContainerFactory.setPrefetchCount(10); // 每个线程一次性最多拉取的消息个数，默认是250，可减少网络IO次数
         listenerContainerFactory.setAcknowledgeMode(AcknowledgeMode.MANUAL);
 
         configurer.configure(listenerContainerFactory,connectionFactory);
