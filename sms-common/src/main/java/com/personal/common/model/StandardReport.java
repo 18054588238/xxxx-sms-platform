@@ -60,4 +60,7 @@ public class StandardReport implements Serializable {
 
     /*客户端请求携带的apiKey*/
     private String apikey;
+
+    // 判断是否再次放到延迟交换机中的标记，false：再次放入 ；true：不需要再放入
+    private Boolean updateStatus = false;
 }
