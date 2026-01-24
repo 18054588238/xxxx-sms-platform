@@ -9,6 +9,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * @ClassName StandardSubmit
@@ -35,7 +36,7 @@ public class StandardSubmit implements Serializable {
     /**
      * 客户端的ip白名单
      */
-    private String ip;
+    private List<String> ip;
 
     /**
      * 客户业务内的uid

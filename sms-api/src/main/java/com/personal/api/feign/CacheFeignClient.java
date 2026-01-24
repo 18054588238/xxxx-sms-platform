@@ -4,6 +4,7 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -29,6 +30,9 @@ public interface CacheFeignClient {
      */
     @GetMapping("/cache/getFieldValue")
     String getFieldValueString(@RequestParam String key, @RequestParam String field);
+
+    @GetMapping("/cache/getFieldValue")
+    List<String> getFieldValueList(@RequestParam String key, @RequestParam String field);
 
     // 获取set类型值
     @GetMapping("/cache/getSMember")

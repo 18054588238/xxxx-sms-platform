@@ -1,9 +1,13 @@
 package com.personal.test.entity;
 
 import lombok.*;
+import org.apache.commons.lang.StringUtils;
 
 import java.time.LocalDateTime;
 import java.io.Serializable;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * 客户信息表(ClientBusiness)实体类
@@ -12,8 +16,6 @@ import java.io.Serializable;
  * @since 2026-01-10 17:32:05
  */
 @Setter
-@Getter
-@Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class ClientBusiness implements Serializable {
@@ -89,6 +91,79 @@ public class ClientBusiness implements Serializable {
      */
     private String extend4;
 
+    public Long getId() {
+        return id;
+    }
 
+    public String getCorpname() {
+        return corpname;
+    }
+
+    public String getApikey() {
+        return apikey;
+    }
+
+    public List<String> getIpAddress() {
+        if (StringUtils.isNotBlank(ipAddress)) {
+            return Arrays.asList(ipAddress.split(","));
+        }
+        return null;
+    }
+
+    public Integer getIsCallback() {
+        return isCallback;
+    }
+
+    public String getCallbackUrl() {
+        return callbackUrl;
+    }
+
+    public String getClientLinkname() {
+        return clientLinkname;
+    }
+
+    public String getClientPhone() {
+        return clientPhone;
+    }
+
+    public String getClientFilters() {
+        return clientFilters;
+    }
+
+    public LocalDateTime getCreated() {
+        return created;
+    }
+
+    public Long getCreateId() {
+        return createId;
+    }
+
+    public LocalDateTime getUpdated() {
+        return updated;
+    }
+
+    public Long getUpdateId() {
+        return updateId;
+    }
+
+    public Integer getIsDelete() {
+        return isDelete;
+    }
+
+    public String getExtend1() {
+        return extend1;
+    }
+
+    public String getExtend2() {
+        return extend2;
+    }
+
+    public String getExtend3() {
+        return extend3;
+    }
+
+    public String getExtend4() {
+        return extend4;
+    }
 }
 

@@ -104,9 +104,18 @@ public class SmsController {
                 if (X_FORWARDED_FOR.equalsIgnoreCase(header) && ip.indexOf(",") > 0) {
                     ip = ip.substring(0, ip.indexOf(","));// X_FORWARDED_FOR中可能会包含多个ip，截取第一个ip
                 }
-                return ip;
+
+                return getIPv4(ip);
             }
         }
-        return request.getRemoteAddr();// 基于传统方式获取一个IP
+        return getIPv4(request.getRemoteAddr());// 基于传统方式获取一个IP
+    }
+
+    // 处理ipv6本地地址
+    private String getIPv4(String ip) {
+        if ("0:0:0:0:0:0:0:1".equals(ip) || "::1".equals(ip)) {
+            return "127.0.0.1";
+        }
+        return ip;
     }
 }
