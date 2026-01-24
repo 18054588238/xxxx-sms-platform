@@ -7,6 +7,8 @@ package com.personal.common.constants;
  * @Description
  */
 public interface SmsConstant {
+    // 运营商第一次响应结果为0表示正确
+    int OPERATOR_STATE_SUCCESS = 0;
     // 短信发送成功
     int REPORT_STATE_SUCCESS = 1;
     // 短信发送失败
@@ -14,4 +16,7 @@ public interface SmsConstant {
     int CODE_TYPE = 0;
     int NOTIFY_TYPE = 1;
     int MARKET_TYPE = 2;
+
+    // 表示短信最终发送成功
+    String DELIVRD = "DELIVRD";
 }

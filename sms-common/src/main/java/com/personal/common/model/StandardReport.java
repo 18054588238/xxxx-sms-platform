@@ -57,4 +57,7 @@ public class StandardReport implements Serializable {
     private String callbackUrl;
     // 重试次数
     private int reSendCount = 0;
+
+    /*客户端请求携带的apiKey*/
+    private String apikey;
 }

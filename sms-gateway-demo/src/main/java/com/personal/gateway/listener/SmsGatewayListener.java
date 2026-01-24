@@ -20,7 +20,7 @@ import java.io.IOException;
  * @ClassName SmsGatewayListener
  * @Author liupanpan
  * @Date 2026/1/22
- * @Description
+ * @Description 监听策略模块发送的消息，并处理
  */
 @Component
 @Slf4j
@@ -41,11 +41,12 @@ public class SmsGatewayListener {
         int sequence = MsgUtils.getSequence();
 
         CmppSubmit cmppSubmit = new CmppSubmit(Command.CMPP2_VERSION,srcNumber,sequence,mobile,text);
-        nettyClient.submit(cmppSubmit);
+        nettyClient.submit(cmppSubmit); // 和运营商通信
 
         // submit保存下来，以便在接收到响应后向es中写数据时使用
         CmppSubmitMapUtil.put(sequence,submit);
 
+        // 手动ack
         channel.basicAck(message.getMessageProperties().getDeliveryTag(),false);
     }
 }

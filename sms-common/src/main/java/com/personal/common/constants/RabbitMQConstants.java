@@ -16,4 +16,9 @@ public interface RabbitMQConstants {
     String SMS_PUSH_REPORT = "sms_push_report_topic";
     // 发送通道消息到网关模块的队列
     String SMS_GATEWAY = "sms_gateway_topic_";
+
+    String SMS_GATEWAY_NORMAL_EXCHANGE = "sms_gateway_normal_exchange" ;
+    String SMS_GATEWAY_NORMAL_QUEUE = "sms_gateway_normal_queue" ;
+    String SMS_GATEWAY_DEAD_EXCHANGE = "sms_gateway_dead_exchange" ;
+    String SMS_GATEWAY_DEAD_QUEUE = "sms_gateway_dead_queue" ;
 }
