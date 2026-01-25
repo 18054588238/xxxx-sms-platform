@@ -10,6 +10,7 @@
         <option value="$PROJECT_DIR$/sms-search/pom.xml" />
         <option value="$PROJECT_DIR$/sms-push/pom.xml" />
         <option value="$PROJECT_DIR$/sms-gateway-demo/pom.xml" />
+        <option value="$PROJECT_DIR$/sms-monitor/pom.xml" />
       </list>
     </option>
   </component>
