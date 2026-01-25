@@ -2,6 +2,7 @@ package com.personal.monitor.controller;
 
 import com.xxl.job.core.context.XxlJobHelper;
 import com.xxl.job.core.handler.annotation.XxlJob;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @Description
  */
 @RestController
+@Slf4j
 public class TestController {
 
     @XxlJob(value = "demoJobHandler")
@@ -18,4 +20,5 @@ public class TestController {
         XxlJobHelper.log("xxl-job-demoJobHandler......log");
         System.out.println("ok执行.......");
     }
+
 }

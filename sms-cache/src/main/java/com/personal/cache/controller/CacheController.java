@@ -2,6 +2,7 @@ package com.personal.cache.controller;
 
 import com.msb.framework.redis.RedisClient;
 import com.personal.cache.model.TestUser;
+import com.personal.common.constants.CacheConstant;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -24,6 +25,15 @@ import java.util.Set;
 public class CacheController {
     @Autowired
     private RedisClient redisClient;
+
+    // 获取redis中存储的key
+    @GetMapping("/getScanKeys")
+    public Set<String> getScanKeys() throws InterruptedException {
+        // todo 这里查询太慢了，后期可以优化 client_id 的存储方式或者使用异步方式等
+        Set<String> scanKeys = redisClient.scan(CacheConstant.CLIENT_CHANNEL+"*");
+        log.info("查询成功，scanKeys:{}",scanKeys);
+        return scanKeys;
+    }
 
     @GetMapping("/getFeeIncreBy")
     public Long getFeeWithIncrementBy(@RequestParam String hashMapName,

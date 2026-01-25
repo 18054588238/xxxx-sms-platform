@@ -10,4 +10,10 @@ spring:
       config: # nacos配置中心地址
         server-addr: 172.16.30.198:8848
         file-extension: yml
-
+feign:
+  client:
+    config:
+      default:
+        connectTimeout: 5000
+        readTimeout: 30000
+        loggerLevel: basic

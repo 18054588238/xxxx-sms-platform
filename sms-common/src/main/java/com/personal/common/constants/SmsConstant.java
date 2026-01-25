@@ -19,4 +19,7 @@ public interface SmsConstant {
 
     // 表示短信最终发送成功
     String DELIVRD = "DELIVRD";
+
+    // 队列消息的最大预警数
+    int MAX_MESSAGE_SIZE = 0;
 }
