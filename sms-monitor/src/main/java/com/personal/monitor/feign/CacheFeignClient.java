@@ -2,6 +2,8 @@ package com.personal.monitor.feign;
 
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
@@ -19,6 +21,6 @@ public interface CacheFeignClient {
     @GetMapping("/cache/getScanKeys")
     Set<String> getScanKeys(@RequestParam String pattern);
 
-    @GetMapping("/cache/hMultiGet")
-    public List<Object> hMultiGet(@RequestParam String key) throws InterruptedException;
+    @PostMapping("/cache/hMultiGet")
+    public List<Object> hMultiGet(@RequestParam String key,@RequestBody String[] fields) throws InterruptedException;
 }

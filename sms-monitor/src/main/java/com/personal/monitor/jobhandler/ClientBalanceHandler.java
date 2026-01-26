@@ -1,7 +1,16 @@
 package com.personal.monitor.jobhandler;
 
+import com.personal.common.constants.CacheConstant;
+import com.personal.common.constants.SmsConstant;
+import com.personal.monitor.feign.CacheFeignClient;
+import com.personal.monitor.utils.MailUtil;
 import com.xxl.job.core.handler.annotation.XxlJob;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
+import java.util.Set;
 
 /**
  * @ClassName XxlJobHandler
@@ -10,6 +19,7 @@ import org.springframework.stereotype.Component;
  * @Description 监控客户余额
  */
 @Component
+@Slf4j
 public class ClientBalanceHandler {
 
     @Autowired
@@ -22,26 +32,30 @@ public class ClientBalanceHandler {
     * %d 用于十进制整数（decimal integer）
     * %f 用于浮点数（float）
     * */
-    String text = "客户您好，你在【烽火短信平台】内的余额仅剩余<h1>%.2f</h1>元，请您及时补充金额，避免影响你您的短信发送！";
+    String text = "客户您好，你在【烽火短信平台】内的余额不足<b>%s</b>元，请您及时补充金额，避免影响你您的短信发送！";
 
     @XxlJob("clientBalanceHandler")
-    public void monitor() {
+    public void monitor() throws InterruptedException {
         // 获取key
         Set<String> keys = cacheFeignClient.getScanKeys(CacheConstant.CLIENT_BALANCE+"*");
 
+        String[] field = {"clientId","balance","extend1"};
         // 获取该客户的账户余额（单位：厘）以及客户邮箱信息
         for (String key : keys) {
-
             // 获取该客户的账户余额（单位：厘）以及客户邮箱信息
-            List<Object> values = cacheFeignClient.hMultiGet(key);
+            List<Object> values = cacheFeignClient.hMultiGet(key,field);
+            long clientId = Long.parseLong(values.get(0)+"");
+            long balance = Long.parseLong(values.get(1)+"");
+            String mail = values.get(2)+"";
 
             // 判断是否余额不足
-            if (msgCount < SmsConstant.BALANCE_LIMIT) {
+            if (balance < SmsConstant.BALANCE_LIMIT) {
                 // 余额不足，发邮件告知
-                mailUtil.sendSimpleMsg(String.format(text,),,"【烽火短信平台】提醒您余额不足。");
-                log.info("客户余额不充足，客户：{},余额为：{}。",,);
+                mailUtil.sendSimpleMsg(String.format(text,balance/1000+1),mail,"【烽火短信平台】提醒您余额不足。");
+                log.info("客户余额不充足，客户：{},余额为：{}。",clientId,balance);
                 return;
             }
+            log.info("客户余额充足，客户：{},余额为：{}。",clientId,balance);
         }
     }
 }

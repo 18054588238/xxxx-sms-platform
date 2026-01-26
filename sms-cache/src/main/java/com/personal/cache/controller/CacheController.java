@@ -10,6 +10,7 @@ import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -27,9 +28,9 @@ public class CacheController {
     private RedisClient redisClient;
 
     // hash结构 一次获取多个字段的值 - 返回的是按顺序对应的字段值
-    @GetMapping("/hMultiGet")
-    public List<Object> hMultiGet(@RequestParam String key,List<String>) throws InterruptedException {
-        List<Object> values = redisClient.multiGet(key);
+    @PostMapping("/hMultiGet")
+    public List<Object> hMultiGet(@RequestParam String key, @RequestBody String[] fields) throws InterruptedException {
+        List<Object> values = redisClient.hMultiGet(key, fields);
         log.info("查询成功，values:{}",values);
         return values;
     }

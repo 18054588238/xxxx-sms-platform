@@ -1,6 +1,7 @@
 package com.personal.monitor.jobhandler;
 
 //import com.rabbitmq.client.ConnectionFactory;
+import com.personal.common.constants.CacheConstant;
 import com.personal.common.constants.RabbitMQConstants;
 import com.personal.common.constants.SmsConstant;
 import com.personal.monitor.feign.CacheFeignClient;
@@ -46,7 +47,7 @@ public class QueueMsgCountHandler {
     @Autowired
     private MailUtil mailUtil;
 
-    String text = "您的队列消息队列堆积了，队名为<h1>%s</h1>，消息个数为<h1>%s</h1>。";
+    String text = "您的队列消息队列堆积了，队名为<b>%s</b>，消息个数为<b>%s</b>。";
 
     // 两个队列一起监控
     @XxlJob("queueMsgCountHandler")
