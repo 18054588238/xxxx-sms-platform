@@ -26,11 +26,19 @@ public class CacheController {
     @Autowired
     private RedisClient redisClient;
 
+    // hash结构 一次获取多个字段的值 - 返回的是按顺序对应的字段值
+    @GetMapping("/hMultiGet")
+    public List<Object> hMultiGet(@RequestParam String key,List<String>) throws InterruptedException {
+        List<Object> values = redisClient.multiGet(key);
+        log.info("查询成功，values:{}",values);
+        return values;
+    }
+
     // 获取redis中存储的key
     @GetMapping("/getScanKeys")
-    public Set<String> getScanKeys() throws InterruptedException {
+    public Set<String> getScanKeys(@RequestParam String pattern) throws InterruptedException {
         // todo 这里查询太慢了，后期可以优化 client_id 的存储方式或者使用异步方式等
-        Set<String> scanKeys = redisClient.scan(CacheConstant.CLIENT_CHANNEL+"*");
+        Set<String> scanKeys = redisClient.scan(pattern);
         log.info("查询成功，scanKeys:{}",scanKeys);
         return scanKeys;
     }

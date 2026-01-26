@@ -46,7 +46,7 @@ public class QueueMsgCountHandler {
     @Autowired
     private MailUtil mailUtil;
 
-    String text = "<h1>您的队列消息队列堆积了，队名为%s，消息个数为%s。</h1>";
+    String text = "您的队列消息队列堆积了，队名为<h1>%s</h1>，消息个数为<h1>%s</h1>。";
 
     // 两个队列一起监控
     @XxlJob("queueMsgCountHandler")
@@ -69,7 +69,7 @@ public class QueueMsgCountHandler {
     private void monitorGatewayQueue(Channel channel) {
 
         // 获取所有客户id
-        Set<String> clientIds = cacheFeignClient.getScanKeys().stream()
+        Set<String> clientIds = cacheFeignClient.getScanKeys(CacheConstant.CLIENT_CHANNEL+"*").stream()
                 .map(key -> StringUtils.substringAfter(key,":")) // client_channel:63
                 .collect(Collectors.toSet());
 

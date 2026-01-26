@@ -17,5 +17,8 @@ import java.util.Set;
 @FeignClient("sms-cache")
 public interface CacheFeignClient {
     @GetMapping("/cache/getScanKeys")
-    Set<String> getScanKeys();
+    Set<String> getScanKeys(@RequestParam String pattern);
+
+    @GetMapping("/cache/hMultiGet")
+    public List<Object> hMultiGet(@RequestParam String key) throws InterruptedException;
 }

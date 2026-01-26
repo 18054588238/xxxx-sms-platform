@@ -22,4 +22,7 @@ public interface SmsConstant {
 
     // 队列消息的最大预警数
     int MAX_MESSAGE_SIZE = 0;
+
+    // 设置监控余额最小值（单位：厘）500000
+    long BALANCE_LIMIT = 500000;
 }
