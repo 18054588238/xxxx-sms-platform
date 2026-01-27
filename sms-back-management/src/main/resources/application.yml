@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: sms-back-management
+  profiles:
+    active: dev
+
+server:
+  port: 18089
+
+shiro:
+  loginUrl: /login.html
+  unauthorizedUrl: /unauthorized.html

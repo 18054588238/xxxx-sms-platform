@@ -16,6 +16,7 @@
     <module>sms-push</module>
     <module>sms-gateway-demo</module>
     <module>sms-monitor</module>
+    <module>sms-back-management</module>
   </modules> <!--表示一个父项目（或者聚合项目）-->
 
   <parent>
