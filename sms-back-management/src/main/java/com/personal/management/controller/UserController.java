@@ -1,0 +1,58 @@
+package com.personal.management.controller;
+
+import com.personal.common.constants.BackManageConstant;
+import com.personal.common.enums.ExceptionEnums;
+import com.personal.common.utils.R;
+import com.personal.common.vo.ResultVO;
+import com.personal.management.entity.dto.LoginDTO;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.AuthenticationException;
+import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.tomcat.util.http.parser.Authorization;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
+
+/**
+ * @ClassName UserController
+ * @Author liupanpan
+ * @Date 2026/1/27
+ * @Description
+ */
+@RestController
+@RequestMapping("/sys")
+@Slf4j
+public class UserController {
+
+    @PostMapping("/login")
+    public ResultVO login(@RequestBody @Valid LoginDTO loginDTO, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            log.info("【认证操作】参数不合法，loginDTO={},e={}", loginDTO,bindingResult.getAllErrors());
+            return R.error(ExceptionEnums.PARAMETER_ERROR);
+        }
+        String username = loginDTO.getUsername();
+        String password = loginDTO.getPassword();
+        String kaptcha = loginDTO.getCaptcha();
+
+        // 判断验证码是否正确
+        String kap = (String) SecurityUtils.getSubject().getSession().getAttribute(BackManageConstant.KAPTCHA);
+        if (!kaptcha.equals(kap)) {
+            // 验证码不正确
+            log.info("验证码不正确,正确的验证码：{},你输入的验证码：{}", kap, kaptcha);
+            return R.error(ExceptionEnums.KAPACHA_ERROR);
+        }
+        // 判断是否通过认证
+        UsernamePasswordToken usernamePasswordToken = new UsernamePasswordToken(username, password, loginDTO.isRememberMe());
+        try {
+            SecurityUtils.getSubject().login(usernamePasswordToken);
+        } catch (AuthenticationException e) {
+            log.info("用户名或密码错误，exception：{}", e.getMessage());
+            return R.error(ExceptionEnums.AUTHEN_ERROR);
+        }
+        return R.ok("登录成功");
+    }
+}

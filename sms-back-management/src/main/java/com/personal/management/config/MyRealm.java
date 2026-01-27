@@ -1,5 +1,7 @@
 package com.personal.management.config;
 
+import com.personal.management.entity.SmsUser;
+import com.personal.management.service.SmsUserService;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
@@ -11,8 +13,11 @@ import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.util.ByteSource;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import java.util.Objects;
 
 /**
  * @ClassName MyRealm
@@ -20,6 +25,7 @@ import javax.annotation.PostConstruct;
  * @Date 2026/1/26
  * @Description
  */
+@Component
 public class MyRealm extends AuthorizingRealm {
 
     /*@PostConstruct
@@ -31,6 +37,9 @@ public class MyRealm extends AuthorizingRealm {
 //        matcher.setStoredCredentialsHexEncoded(true); // 是否存储为16进制
         super.setCredentialsMatcher(matcher);
     }*/
+
+    @Autowired
+    private SmsUserService userService;
 
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
@@ -44,13 +53,14 @@ public class MyRealm extends AuthorizingRealm {
         String username = (String) authenticationToken.getPrincipal(); // 用户传过来的用户名
 //        String password = (String) authenticationToken.getCredentials(); // shiro自动进行密码校验，告诉shiro密码加密方式以及盐即可
         // 根据用户名查询数据库，获取密码和盐
-        // todo 先写死
-        if (StringUtils.isBlank(username) ||!"admin".equals(username)) {
+        SmsUser smsUser = userService.queryByUsername(username);
+
+        if (Objects.isNull(smsUser) || StringUtils.isBlank(username)) {
             return null;
         }
-        String password = "b39dc5da02d002e6ac581e5bb929d2e5";
-        String salt = "09a8424ed5bf4373af6530fec2b29c0f";
-        SimpleAuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(username, password, ByteSource.Util.bytes(salt), getName());
+        String password = smsUser.getPassword();
+        String salt = smsUser.getSalt();
+        SimpleAuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(smsUser, password, ByteSource.Util.bytes(salt), getName());
         return authenticationInfo;
     }
 

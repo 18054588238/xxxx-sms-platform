@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.personal.management.dao.SmsMenuDao">
+
+    <resultMap type="com.personal.management.entity.SmsMenu" id="SmsMenuMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="name" column="name" jdbcType="VARCHAR"/>
+        <result property="parentId" column="parent_id" jdbcType="INTEGER"/>
+        <result property="url" column="url" jdbcType="VARCHAR"/>
+        <result property="icon" column="icon" jdbcType="VARCHAR"/>
+        <result property="type" column="type" jdbcType="INTEGER"/>
+        <result property="sort" column="sort" jdbcType="INTEGER"/>
+        <result property="created" column="created" jdbcType="TIMESTAMP"/>
+        <result property="createId" column="create_id" jdbcType="INTEGER"/>
+        <result property="updated" column="updated" jdbcType="TIMESTAMP"/>
+        <result property="updateId" column="update_id" jdbcType="INTEGER"/>
+        <result property="isDelete" column="is_delete" jdbcType="INTEGER"/>
+        <result property="extend1" column="extend1" jdbcType="VARCHAR"/>
+        <result property="extend2" column="extend2" jdbcType="VARCHAR"/>
+        <result property="extend3" column="extend3" jdbcType="VARCHAR"/>
+        <result property="extend4" column="extend4" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="SmsMenuMap">
+        select
+id, name, parent_id, url, icon, type, sort, created, create_id, updated, update_id, is_delete, extend1, extend2, extend3, extend4
+        from sms_menu
+        where id = #{id}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="SmsMenuMap">
+        select
+id, name, parent_id, url, icon, type, sort, created, create_id, updated, update_id, is_delete, extend1, extend2, extend3, extend4
+        from sms_menu
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="name != null and name != ''">
+                and name = #{name}
+            </if>
+            <if test="parentId != null">
+                and parent_id = #{parentId}
+            </if>
+            <if test="url != null and url != ''">
+                and url = #{url}
+            </if>
+            <if test="icon != null and icon != ''">
+                and icon = #{icon}
+            </if>
+            <if test="type != null">
+                and type = #{type}
+            </if>
+            <if test="sort != null">
+                and sort = #{sort}
+            </if>
+            <if test="created != null">
+                and created = #{created}
+            </if>
+            <if test="createId != null">
+                and create_id = #{createId}
+            </if>
+            <if test="updated != null">
+                and updated = #{updated}
+            </if>
+            <if test="updateId != null">
+                and update_id = #{updateId}
+            </if>
+            <if test="isDelete != null">
+                and is_delete = #{isDelete}
+            </if>
+            <if test="extend1 != null and extend1 != ''">
+                and extend1 = #{extend1}
+            </if>
+            <if test="extend2 != null and extend2 != ''">
+                and extend2 = #{extend2}
+            </if>
+            <if test="extend3 != null and extend3 != ''">
+                and extend3 = #{extend3}
+            </if>
+            <if test="extend4 != null and extend4 != ''">
+                and extend4 = #{extend4}
+            </if>
+        </where>
+        limit #{pageable.offset}, #{pageable.pageSize}
+    </select>
+
+    <!--统计总行数-->
+    <select id="count" resultType="java.lang.Long">
+        select count(1)
+        from sms_menu
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="name != null and name != ''">
+                and name = #{name}
+            </if>
+            <if test="parentId != null">
+                and parent_id = #{parentId}
+            </if>
+            <if test="url != null and url != ''">
+                and url = #{url}
+            </if>
+            <if test="icon != null and icon != ''">
+                and icon = #{icon}
+            </if>
+            <if test="type != null">
+                and type = #{type}
+            </if>
+            <if test="sort != null">
+                and sort = #{sort}
+            </if>
+            <if test="created != null">
+                and created = #{created}
+            </if>
+            <if test="createId != null">
+                and create_id = #{createId}
+            </if>
+            <if test="updated != null">
+                and updated = #{updated}
+            </if>
+            <if test="updateId != null">
+                and update_id = #{updateId}
+            </if>
+            <if test="isDelete != null">
+                and is_delete = #{isDelete}
+            </if>
+            <if test="extend1 != null and extend1 != ''">
+                and extend1 = #{extend1}
+            </if>
+            <if test="extend2 != null and extend2 != ''">
+                and extend2 = #{extend2}
+            </if>
+            <if test="extend3 != null and extend3 != ''">
+                and extend3 = #{extend3}
+            </if>
+            <if test="extend4 != null and extend4 != ''">
+                and extend4 = #{extend4}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into sms_menu(name, parent_id, url, icon, type, sort, created, create_id, updated, update_id, is_delete, extend1, extend2, extend3, extend4)
+        values (#{name}, #{parentId}, #{url}, #{icon}, #{type}, #{sort}, #{created}, #{createId}, #{updated}, #{updateId}, #{isDelete}, #{extend1}, #{extend2}, #{extend3}, #{extend4})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into sms_menu(name, parent_id, url, icon, type, sort, created, create_id, updated, update_id, is_delete, extend1, extend2, extend3, extend4)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+        (#{entity.name}, #{entity.parentId}, #{entity.url}, #{entity.icon}, #{entity.type}, #{entity.sort}, #{entity.created}, #{entity.createId}, #{entity.updated}, #{entity.updateId}, #{entity.isDelete}, #{entity.extend1}, #{entity.extend2}, #{entity.extend3}, #{entity.extend4})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into sms_menu(name, parent_id, url, icon, type, sort, created, create_id, updated, update_id, is_delete, extend1, extend2, extend3, extend4)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.name}, #{entity.parentId}, #{entity.url}, #{entity.icon}, #{entity.type}, #{entity.sort}, #{entity.created}, #{entity.createId}, #{entity.updated}, #{entity.updateId}, #{entity.isDelete}, #{entity.extend1}, #{entity.extend2}, #{entity.extend3}, #{entity.extend4})
+        </foreach>
+        on duplicate key update
+name = values(name),
+parent_id = values(parent_id),
+url = values(url),
+icon = values(icon),
+type = values(type),
+sort = values(sort),
+created = values(created),
+create_id = values(create_id),
+updated = values(updated),
+update_id = values(update_id),
+is_delete = values(is_delete),
+extend1 = values(extend1),
+extend2 = values(extend2),
+extend3 = values(extend3),
+extend4 = values(extend4)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update sms_menu
+        <set>
+            <if test="name != null and name != ''">
+                name = #{name},
+            </if>
+            <if test="parentId != null">
+                parent_id = #{parentId},
+            </if>
+            <if test="url != null and url != ''">
+                url = #{url},
+            </if>
+            <if test="icon != null and icon != ''">
+                icon = #{icon},
+            </if>
+            <if test="type != null">
+                type = #{type},
+            </if>
+            <if test="sort != null">
+                sort = #{sort},
+            </if>
+            <if test="created != null">
+                created = #{created},
+            </if>
+            <if test="createId != null">
+                create_id = #{createId},
+            </if>
+            <if test="updated != null">
+                updated = #{updated},
+            </if>
+            <if test="updateId != null">
+                update_id = #{updateId},
+            </if>
+            <if test="isDelete != null">
+                is_delete = #{isDelete},
+            </if>
+            <if test="extend1 != null and extend1 != ''">
+                extend1 = #{extend1},
+            </if>
+            <if test="extend2 != null and extend2 != ''">
+                extend2 = #{extend2},
+            </if>
+            <if test="extend3 != null and extend3 != ''">
+                extend3 = #{extend3},
+            </if>
+            <if test="extend4 != null and extend4 != ''">
+                extend4 = #{extend4},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from sms_menu where id = #{id}
+    </delete>
+
+</mapper>
+

@@ -24,22 +24,18 @@ public class ShiroConfig {
 
     Map<String, String> filterChainDefinitionMap = new LinkedHashMap();
 
-    /* 自定义认证授权realm */
-    @Bean
-    public MyRealm myRealm() {
-        return new MyRealm();
-    }
-
     /*过滤器链*/
     @Bean
     public ShiroFilterChainDefinition shiroFilterChainDefinition() {
         DefaultShiroFilterChainDefinition chainDefinition = new DefaultShiroFilterChainDefinition();
 
-        filterChainDefinitionMap.put("/sys/user/login","anon");// 放行
+        filterChainDefinitionMap.put("/public/**","anon");// 放行
+        filterChainDefinitionMap.put("/captcha.jpg","anon");// 放行
+        filterChainDefinitionMap.put("/sys/login","anon");// 放行
         filterChainDefinitionMap.put("/index.html","anon");// 放行
         filterChainDefinitionMap.put("/login.html","anon");// 放行
         filterChainDefinitionMap.put("/logout","anon");// 放行
-        filterChainDefinitionMap.put("public/*","anon");// 放行
+
         filterChainDefinitionMap.put("/**","authc");// 认证
 
         chainDefinition.addPathDefinitions(filterChainDefinitionMap);
@@ -48,9 +44,9 @@ public class ShiroConfig {
     }
     /*认证*/
     @Bean
-    public DefaultWebSecurityManager securityManager() {
+    public DefaultWebSecurityManager securityManager(MyRealm myRealm) {
         DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
-        securityManager.setRealm(this.myRealm());
+        securityManager.setRealm(myRealm);
         return securityManager;
     }
 }

@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.personal.management.dao.SmsUserDao">
+
+    <resultMap type="com.personal.management.entity.SmsUser" id="SmsUserMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="username" column="username" jdbcType="VARCHAR"/>
+        <result property="password" column="password" jdbcType="VARCHAR"/>
+        <result property="salt" column="salt" jdbcType="VARCHAR"/>
+        <result property="nickname" column="nickname" jdbcType="VARCHAR"/>
+        <result property="created" column="created" jdbcType="TIMESTAMP"/>
+        <result property="createId" column="create_id" jdbcType="INTEGER"/>
+        <result property="updated" column="updated" jdbcType="TIMESTAMP"/>
+        <result property="updateId" column="update_id" jdbcType="INTEGER"/>
+        <result property="isDelete" column="is_delete" jdbcType="INTEGER"/>
+        <result property="extend1" column="extend1" jdbcType="VARCHAR"/>
+        <result property="extend2" column="extend2" jdbcType="VARCHAR"/>
+        <result property="extend3" column="extend3" jdbcType="VARCHAR"/>
+        <result property="extend4" column="extend4" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <select id="queryByUsername" resultMap="SmsUserMap">
+        select
+            id, username, password, salt, nickname, created, create_id, updated, update_id, is_delete, extend1, extend2, extend3, extend4
+        from sms_user
+        where username = #{username}
+    </select>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="SmsUserMap">
+        select
+id, username, password, salt, nickname, created, create_id, updated, update_id, is_delete, extend1, extend2, extend3, extend4
+        from sms_user
+        where id = #{id}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="SmsUserMap">
+        select
+id, username, password, salt, nickname, created, create_id, updated, update_id, is_delete, extend1, extend2, extend3, extend4
+        from sms_user
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="username != null and username != ''">
+                and username = #{username}
+            </if>
+            <if test="password != null and password != ''">
+                and password = #{password}
+            </if>
+            <if test="salt != null and salt != ''">
+                and salt = #{salt}
+            </if>
+            <if test="nickname != null and nickname != ''">
+                and nickname = #{nickname}
+            </if>
+            <if test="created != null">
+                and created = #{created}
+            </if>
+            <if test="createId != null">
+                and create_id = #{createId}
+            </if>
+            <if test="updated != null">
+                and updated = #{updated}
+            </if>
+            <if test="updateId != null">
+                and update_id = #{updateId}
+            </if>
+            <if test="isDelete != null">
+                and is_delete = #{isDelete}
+            </if>
+            <if test="extend1 != null and extend1 != ''">
+                and extend1 = #{extend1}
+            </if>
+            <if test="extend2 != null and extend2 != ''">
+                and extend2 = #{extend2}
+            </if>
+            <if test="extend3 != null and extend3 != ''">
+                and extend3 = #{extend3}
+            </if>
+            <if test="extend4 != null and extend4 != ''">
+                and extend4 = #{extend4}
+            </if>
+        </where>
+        limit #{pageable.offset}, #{pageable.pageSize}
+    </select>
+
+    <!--统计总行数-->
+    <select id="count" resultType="java.lang.Long">
+        select count(1)
+        from sms_user
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="username != null and username != ''">
+                and username = #{username}
+            </if>
+            <if test="password != null and password != ''">
+                and password = #{password}
+            </if>
+            <if test="salt != null and salt != ''">
+                and salt = #{salt}
+            </if>
+            <if test="nickname != null and nickname != ''">
+                and nickname = #{nickname}
+            </if>
+            <if test="created != null">
+                and created = #{created}
+            </if>
+            <if test="createId != null">
+                and create_id = #{createId}
+            </if>
+            <if test="updated != null">
+                and updated = #{updated}
+            </if>
+            <if test="updateId != null">
+                and update_id = #{updateId}
+            </if>
+            <if test="isDelete != null">
+                and is_delete = #{isDelete}
+            </if>
+            <if test="extend1 != null and extend1 != ''">
+                and extend1 = #{extend1}
+            </if>
+            <if test="extend2 != null and extend2 != ''">
+                and extend2 = #{extend2}
+            </if>
+            <if test="extend3 != null and extend3 != ''">
+                and extend3 = #{extend3}
+            </if>
+            <if test="extend4 != null and extend4 != ''">
+                and extend4 = #{extend4}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into sms_user(username, password, salt, nickname, created, create_id, updated, update_id, is_delete, extend1, extend2, extend3, extend4)
+        values (#{username}, #{password}, #{salt}, #{nickname}, #{created}, #{createId}, #{updated}, #{updateId}, #{isDelete}, #{extend1}, #{extend2}, #{extend3}, #{extend4})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into sms_user(username, password, salt, nickname, created, create_id, updated, update_id, is_delete, extend1, extend2, extend3, extend4)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+        (#{entity.username}, #{entity.password}, #{entity.salt}, #{entity.nickname}, #{entity.created}, #{entity.createId}, #{entity.updated}, #{entity.updateId}, #{entity.isDelete}, #{entity.extend1}, #{entity.extend2}, #{entity.extend3}, #{entity.extend4})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into sms_user(username, password, salt, nickname, created, create_id, updated, update_id, is_delete, extend1, extend2, extend3, extend4)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.username}, #{entity.password}, #{entity.salt}, #{entity.nickname}, #{entity.created}, #{entity.createId}, #{entity.updated}, #{entity.updateId}, #{entity.isDelete}, #{entity.extend1}, #{entity.extend2}, #{entity.extend3}, #{entity.extend4})
+        </foreach>
+        on duplicate key update
+username = values(username),
+password = values(password),
+salt = values(salt),
+nickname = values(nickname),
+created = values(created),
+create_id = values(create_id),
+updated = values(updated),
+update_id = values(update_id),
+is_delete = values(is_delete),
+extend1 = values(extend1),
+extend2 = values(extend2),
+extend3 = values(extend3),
+extend4 = values(extend4)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update sms_user
+        <set>
+            <if test="username != null and username != ''">
+                username = #{username},
+            </if>
+            <if test="password != null and password != ''">
+                password = #{password},
+            </if>
+            <if test="salt != null and salt != ''">
+                salt = #{salt},
+            </if>
+            <if test="nickname != null and nickname != ''">
+                nickname = #{nickname},
+            </if>
+            <if test="created != null">
+                created = #{created},
+            </if>
+            <if test="createId != null">
+                create_id = #{createId},
+            </if>
+            <if test="updated != null">
+                updated = #{updated},
+            </if>
+            <if test="updateId != null">
+                update_id = #{updateId},
+            </if>
+            <if test="isDelete != null">
+                is_delete = #{isDelete},
+            </if>
+            <if test="extend1 != null and extend1 != ''">
+                extend1 = #{extend1},
+            </if>
+            <if test="extend2 != null and extend2 != ''">
+                extend2 = #{extend2},
+            </if>
+            <if test="extend3 != null and extend3 != ''">
+                extend3 = #{extend3},
+            </if>
+            <if test="extend4 != null and extend4 != ''">
+                extend4 = #{extend4},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from sms_user where id = #{id}
+    </delete>
+
+</mapper>
+

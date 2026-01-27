@@ -28,6 +28,9 @@ public enum ExceptionEnums {
     NO_ROUTE_CHANNEL(-18,"当前客户没有匹配的路由通道!"),
     ERROR_TO_ES_INDEX(-19,"向es写入数据失败"),
     ERROR_TO_ES_UPDATE(-20,"向es修改数据失败"),
+
+    KAPACHA_ERROR(-100,"验证码错误！"),
+    AUTHEN_ERROR(-101,"用户名或密码错误！"),
     ;
 
     private Integer code;
