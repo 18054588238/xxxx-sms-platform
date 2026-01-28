@@ -22,7 +22,7 @@ import java.util.Date;
 public class SmsUser implements Serializable {
     private static final long serialVersionUID = 500871657943932164L;
 
-    private Integer id;
+    private Long id;
 /**
      * 用户名
      */

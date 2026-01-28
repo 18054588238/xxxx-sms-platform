@@ -4,18 +4,21 @@ import com.personal.common.constants.BackManageConstant;
 import com.personal.common.enums.ExceptionEnums;
 import com.personal.common.utils.R;
 import com.personal.common.vo.ResultVO;
+import com.personal.management.entity.SmsUser;
 import com.personal.management.entity.dto.LoginDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.subject.Subject;
 import org.apache.tomcat.util.http.parser.Authorization;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.HashMap;
 
 /**
  * @ClassName UserController
@@ -54,5 +57,25 @@ public class UserController {
             return R.error(ExceptionEnums.AUTHEN_ERROR);
         }
         return R.ok("登录成功");
+    }
+
+    @GetMapping("/user/info")
+    public ResultVO getUserInfo() {
+        Subject subject = SecurityUtils.getSubject();
+        SmsUser smsUser = (SmsUser) subject.getPrincipal();
+
+        if (smsUser == null) {
+            log.info("【获取登录用户信息】 用户未登录！！");
+            return R.error(ExceptionEnums.NOT_LOGIN);
+        }
+        HashMap<String, Object> data = new HashMap<>();
+        data.put("nickname", smsUser.getNickname());
+        data.put("username", smsUser.getUsername());
+        return R.ok("",data);
+    }
+
+    @GetMapping("/menu/user")
+    public ResultVO getMenuUser() {
+        return R.ok("");
     }
 }

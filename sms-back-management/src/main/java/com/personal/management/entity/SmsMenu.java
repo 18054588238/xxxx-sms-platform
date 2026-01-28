@@ -19,7 +19,7 @@ import java.io.Serializable;
 public class SmsMenu implements Serializable {
     private static final long serialVersionUID = -89754391551545977L;
 
-    private Integer id;
+    private Long id;
 /**
      * 菜单名
      */

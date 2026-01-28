@@ -19,7 +19,7 @@ import java.io.Serializable;
 public class SmsRole implements Serializable {
     private static final long serialVersionUID = 370387353989806037L;
 
-    private Integer id;
+    private Long id;
 /**
      * 角色名
      */

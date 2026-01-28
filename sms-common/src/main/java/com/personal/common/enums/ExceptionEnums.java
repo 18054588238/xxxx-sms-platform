@@ -31,7 +31,7 @@ public enum ExceptionEnums {
 
     KAPACHA_ERROR(-100,"验证码错误！"),
     AUTHEN_ERROR(-101,"用户名或密码错误！"),
-    ;
+    NOT_LOGIN(-102, "用户未登录");
 
     private Integer code;
     private String message;

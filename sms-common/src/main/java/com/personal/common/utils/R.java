@@ -17,6 +17,10 @@ public class R {
         return new ResultVO(0,msg);
     }
 
+    public static ResultVO ok(String msg,Object data) {
+        return new ResultVO(0,msg,data);
+    }
+
     public static ResultVO error(ExceptionEnums enums) {
         return new ResultVO(enums.getCode(),enums.getMessage());
     }
