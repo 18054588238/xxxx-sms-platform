@@ -5,6 +5,7 @@ import com.personal.common.constants.RabbitMQConstants;
 import com.personal.common.model.StandardReport;
 import com.personal.common.model.StandardSubmit;
 import com.personal.search.service.ElasticsearchService;
+import com.personal.search.utils.SearchUtil;
 import com.personal.search.utils.ThreadPoolUtil;
 import com.rabbitmq.client.Channel;
 import lombok.extern.slf4j.Slf4j;
@@ -32,13 +33,11 @@ public class SmsSearchListener {
     @Autowired
     ElasticsearchService elasticsearchService;
 
-    private final String indexNamePrefix = "sms_submit_log_";
-
     @RabbitListener(queues = RabbitMQConstants.SMS_WRITE_LOG)
     public void consumer(StandardSubmit submit, Channel channel, Message message) throws IOException {
         log.info("【搜索模块】接收到日志消息：{}",submit);
 
-        elasticsearchService.index(indexNamePrefix+getCurYear(), String.valueOf(submit.getSequenceId()), JSON.toJSONString(submit));
+        elasticsearchService.index(SearchUtil.getIndex(), String.valueOf(submit.getSequenceId()), JSON.toJSONString(submit));
         // 手动ack
         channel.basicAck(message.getMessageProperties().getDeliveryTag(),false);
     }
@@ -53,12 +52,9 @@ public class SmsSearchListener {
         Map<String, Object> map = new HashMap<>();
         map.put("reportState", report.getReportState());
 
-        elasticsearchService.update(indexNamePrefix+getCurYear(), String.valueOf(report.getSequenceId()), map);
+        elasticsearchService.update(SearchUtil.getIndex(), String.valueOf(report.getSequenceId()), map);
         // 手动ack
         channel.basicAck(message.getMessageProperties().getDeliveryTag(),false);
     }
 
-    private int getCurYear() {
-        return LocalDate.now().getYear();
-    }
 }

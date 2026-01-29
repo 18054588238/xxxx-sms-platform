@@ -16,7 +16,7 @@ public interface SmsRoleService {
      * @param id 主键
      * @return 实例对象
      */
-    SmsRole queryById(Integer id);
+    SmsRole queryById(Long id);
 
 
     /**

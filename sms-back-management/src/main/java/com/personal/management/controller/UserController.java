@@ -6,6 +6,7 @@ import com.personal.common.utils.R;
 import com.personal.common.vo.ResultVO;
 import com.personal.management.entity.SmsUser;
 import com.personal.management.entity.dto.LoginDTO;
+import com.personal.management.service.SmsMenuService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
@@ -13,12 +14,15 @@ import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
 import org.apache.tomcat.util.http.parser.Authorization;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @ClassName UserController
@@ -30,6 +34,9 @@ import java.util.HashMap;
 @RequestMapping("/sys")
 @Slf4j
 public class UserController {
+
+    @Autowired
+    private SmsMenuService menuService;
 
     @PostMapping("/login")
     public ResultVO login(@RequestBody @Valid LoginDTO loginDTO, BindingResult bindingResult) {
@@ -61,8 +68,8 @@ public class UserController {
 
     @GetMapping("/user/info")
     public ResultVO getUserInfo() {
-        Subject subject = SecurityUtils.getSubject();
-        SmsUser smsUser = (SmsUser) subject.getPrincipal();
+        // 获取登录用户信息
+        SmsUser smsUser = getSmsUser();
 
         if (smsUser == null) {
             log.info("【获取登录用户信息】 用户未登录！！");
@@ -71,11 +78,27 @@ public class UserController {
         HashMap<String, Object> data = new HashMap<>();
         data.put("nickname", smsUser.getNickname());
         data.put("username", smsUser.getUsername());
-        return R.ok("",data);
+        return R.ok(data);
     }
 
+    private static SmsUser getSmsUser() {
+        Subject subject = SecurityUtils.getSubject();
+        SmsUser smsUser = (SmsUser) subject.getPrincipal();
+        return smsUser;
+    }
+
+    // 获取当前登录用户权限下的菜单列表
     @GetMapping("/menu/user")
     public ResultVO getMenuUser() {
-        return R.ok("");
+        SmsUser smsUser = getSmsUser();
+
+        if (smsUser == null) {
+            log.info("【获取登录用户信息】 用户未登录！！");
+            return R.error(ExceptionEnums.NOT_LOGIN);
+        }
+        // 树形结构
+        List<Map<String,Object>> data = menuService.getMenuListByUserId(smsUser.getId());
+
+        return R.ok(data);
     }
 }

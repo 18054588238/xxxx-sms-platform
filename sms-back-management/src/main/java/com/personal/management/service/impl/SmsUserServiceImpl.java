@@ -29,7 +29,7 @@ public class SmsUserServiceImpl implements SmsUserService {
      * @return 实例对象
      */
     @Override
-    public SmsUser queryById(Integer id) {
+    public SmsUser queryById(Long id) {
         return this.smsUserDao.queryById(id);
     }
 

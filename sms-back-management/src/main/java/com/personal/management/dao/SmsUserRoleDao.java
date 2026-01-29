@@ -1,5 +1,6 @@
 package com.personal.management.dao;
 
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.personal.management.entity.SmsUserRole;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -12,7 +13,7 @@ import java.util.List;
  * @since 2026-01-27 19:06:40
  */
 @Mapper
-public interface SmsUserRoleDao {
+public interface SmsUserRoleDao extends BaseMapper<SmsUserRole> {
 
     /**
      * 通过ID查询单条数据

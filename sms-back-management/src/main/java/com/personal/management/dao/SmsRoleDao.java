@@ -20,7 +20,7 @@ public interface SmsRoleDao {
      * @param id 主键
      * @return 实例对象
      */
-    SmsRole queryById(Integer id);
+    SmsRole queryById(Long id);
 
     /**
      * 统计总行数

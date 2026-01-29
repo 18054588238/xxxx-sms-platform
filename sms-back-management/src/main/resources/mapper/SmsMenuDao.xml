@@ -143,6 +143,19 @@ id, name, parent_id, url, icon, type, sort, created, create_id, updated, update_
         </where>
     </select>
 
+    <select id="getMenuListByUserId" resultType="java.util.Map">
+        select
+            m.id id, m.name, m.parent_id parentId, m.url, m.icon, m.type
+        from
+            sms_menu m
+                inner join sms_role_menu rm on m.id = rm.menu_id
+                inner join sms_user_role ur on ur.role_id = rm.role_id
+        where
+            ur.user_id = 1
+          and m.type in (0,1)
+        order by m.type
+    </select>
+
     <!--新增所有列-->
     <insert id="insert" keyProperty="id" useGeneratedKeys="true">
         insert into sms_menu(name, parent_id, url, icon, type, sort, created, create_id, updated, update_id, is_delete, extend1, extend2, extend3, extend4)

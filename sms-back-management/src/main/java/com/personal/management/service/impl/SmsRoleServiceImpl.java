@@ -25,7 +25,7 @@ public class SmsRoleServiceImpl implements SmsRoleService {
      * @return 实例对象
      */
     @Override
-    public SmsRole queryById(Integer id) {
+    public SmsRole queryById(Long id) {
         return this.smsRoleDao.queryById(id);
     }
 

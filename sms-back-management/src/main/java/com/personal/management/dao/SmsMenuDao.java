@@ -1,9 +1,11 @@
 package com.personal.management.dao;
 
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.personal.management.entity.SmsMenu;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 菜单表(SmsMenu)表数据库访问层
@@ -12,7 +14,7 @@ import java.util.List;
  * @since 2026-01-27 19:06:33
  */
 @Mapper
-public interface SmsMenuDao {
+public interface SmsMenuDao extends BaseMapper<SmsMenu> {
 
     /**
      * 通过ID查询单条数据
@@ -20,7 +22,7 @@ public interface SmsMenuDao {
      * @param id 主键
      * @return 实例对象
      */
-    SmsMenu queryById(Integer id);
+    SmsMenu queryById(Long id);
 
     /**
      * 统计总行数
@@ -56,6 +58,7 @@ public interface SmsMenuDao {
     int insertOrUpdateBatch(@Param("entities") List<SmsMenu> entities);
 
     /**
+     *
      * 修改数据
      *
      * @param smsMenu 实例对象
@@ -71,5 +74,6 @@ public interface SmsMenuDao {
      */
     int deleteById(Integer id);
 
+    List<Map<String, Object>> getMenuListByUserId(@Param("userId")Long userId);
 }
 

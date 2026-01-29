@@ -17,8 +17,33 @@ public class R {
         return new ResultVO(0,msg);
     }
 
-    public static ResultVO ok(String msg,Object data) {
-        return new ResultVO(0,msg,data);
+    /**
+     * 成功，无数据
+     * @return
+     */
+    public static ResultVO ok(){
+        return new ResultVO(0,"");
+    }
+
+    /**
+     * 成功，有数据
+     * @return
+     */
+    public static ResultVO ok(Object data){
+        ResultVO vo = ok();
+        vo.setData(data);
+        return vo;
+    }
+
+    /**
+     * 成功，有数据
+     * @return
+     */
+    public static ResultVO ok(Long total ,Object rows){
+        ResultVO vo = ok();
+        vo.setTotal(total);
+        vo.setRows(rows);
+        return vo;
     }
 
     public static ResultVO error(ExceptionEnums enums) {

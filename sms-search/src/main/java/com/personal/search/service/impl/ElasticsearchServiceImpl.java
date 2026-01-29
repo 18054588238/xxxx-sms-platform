@@ -5,24 +5,39 @@ import com.personal.common.enums.ExceptionEnums;
 import com.personal.common.exception.SearchException;
 import com.personal.common.model.StandardReport;
 import com.personal.search.service.ElasticsearchService;
+import com.personal.search.utils.SearchUtil;
 import com.personal.search.utils.ThreadPoolUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.StringUtils;
 import org.elasticsearch.action.DocWriteResponse;
 import org.elasticsearch.action.get.GetRequest;
 import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.action.index.IndexResponse;
+import org.elasticsearch.action.search.SearchRequest;
+import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.action.update.UpdateRequest;
 import org.elasticsearch.action.update.UpdateResponse;
 import org.elasticsearch.client.Request;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
+import org.elasticsearch.common.text.Text;
 import org.elasticsearch.common.xcontent.XContentType;
+import org.elasticsearch.index.query.BoolQueryBuilder;
+import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.search.SearchHit;
+import org.elasticsearch.search.SearchHits;
+import org.elasticsearch.search.builder.SearchSourceBuilder;
+import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
+import org.elasticsearch.search.fetch.subphase.highlight.HighlightField;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import java.io.IOException;
-import java.util.Map;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.util.*;
 
 /**
  * @ClassName ElasticsearchServiceImpl
@@ -89,6 +104,108 @@ public class ElasticsearchServiceImpl implements ElasticsearchService {
         }
         log.info("【搜索模块】修改数据成功,IndexRequest = {},IndexResponse = {},map = {}",request,response,map);
 
+    }
+
+    @Override
+    public Map<String, Object> findSmsByParameters(Map map) throws IOException {
+        // 获取参数
+        Object fromObj = map.get("from");
+        Object sizeObj = map.get("size");
+        Object contentObj = map.get("content");
+        Object mobileObj = map.get("mobile");
+        Object startTimeObj = map.get("starttime");
+        Object stopTimeObj = map.get("stoptime");
+        Object clientIDObj = map.get("clientID");
+
+        // clientIDObj可能是List集合，也可能是单个客户id
+        List<Long> clientIds = new ArrayList<>();
+        if (clientIDObj instanceof List) {
+            clientIds = (List<Long>) clientIDObj;
+        } else if (StringUtils.isNotBlank(clientIDObj.toString())) {
+            clientIds = Collections.singletonList(Long.parseLong(clientIDObj + ""));
+        }
+
+        // 封装数据，进行查询
+        SearchRequest searchRequest = new SearchRequest(SearchUtil.getIndex()); // 添加index索引
+
+        searchSource(fromObj, sizeObj, mobileObj, contentObj, startTimeObj, stopTimeObj, clientIds, searchRequest);
+
+        SearchResponse response = restHighLevelClient.search(searchRequest, RequestOptions.DEFAULT);
+
+        SearchHits hits = response.getHits();
+        // 查询总条数
+        long total = 0;
+        if (hits.getTotalHits() != null) {
+            total = hits.getTotalHits().value;
+        }
+        SearchHit[] searchHits = hits.getHits();
+        List<Map> rows = new ArrayList<>();
+
+        for (SearchHit hit : searchHits) {
+            Map<String, Object> row = hit.getSourceAsMap();
+            String sendTimeStr = row.get("sendTime")+"";
+            row.put("sendTimeStr",sendTimeStr);
+            row.put("corpname",row.get("sign"));
+
+            Map<String, HighlightField> highlightFields = hit.getHighlightFields();
+            HighlightField highlightField = highlightFields.get("text");
+            if (highlightField != null) {
+                Text[] fragments = highlightField.fragments();
+                String fragmentString = fragments[0].string();
+                // 设置高亮
+                row.put("text",fragmentString);
+            }
+
+            rows.add(row);
+        }
+        //5、返回数据
+        Map<String, Object> result = new HashMap<>();
+        result.put("total",total);
+        result.put("rows",rows);
+
+        return result;
+    }
+
+    private static void searchSource(Object fromObj, Object sizeObj, Object mobileObj, Object contentObj, Object startTimeObj, Object stopTimeObj, List<Long> clientIds, SearchRequest searchRequest) {
+        // 封装搜索参数
+        SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+
+        searchSourceBuilder.from(Integer.parseInt(fromObj +""));
+        searchSourceBuilder.size(Integer.parseInt(sizeObj +""));
+
+        // 布尔查询
+        BoolQueryBuilder boolQueryBuilder = new BoolQueryBuilder();
+
+        if (StringUtils.isNotBlank(mobileObj.toString())) {
+            boolQueryBuilder.must(QueryBuilders.prefixQuery("mobile", mobileObj +""));
+        }
+        if (StringUtils.isNotBlank(contentObj.toString())) {
+            boolQueryBuilder.must(QueryBuilders.matchQuery("text", contentObj));
+        }
+        if (StringUtils.isNotBlank(startTimeObj.toString())) {
+            boolQueryBuilder.filter(QueryBuilders.rangeQuery("sendTime").gte(startTimeObj +""));
+        }
+        if (StringUtils.isNotBlank(stopTimeObj.toString())) {
+            boolQueryBuilder.filter(QueryBuilders.rangeQuery("sendTime").lte(stopTimeObj +""));
+        }
+        if (!CollectionUtils.isEmpty(clientIds)) {
+            boolQueryBuilder.must(QueryBuilders.termsQuery("clientId", clientIds));
+        }
+        // 封装查询条件
+        searchSourceBuilder.query(boolQueryBuilder);
+
+        HighlightBuilder highlightBuilder = new HighlightBuilder();
+
+        HighlightBuilder.Field highLightText = new HighlightBuilder.Field("text");
+        highLightText.highlighterType("unified");
+        highLightText.preTags("<span style='color:red'>");
+        highLightText.postTags("</span>");
+        highlightBuilder.field(highLightText);
+
+        searchSourceBuilder.highlighter(highlightBuilder);
+
+        // 执行检索
+        searchRequest.source(searchSourceBuilder);
     }
 
     private boolean isExists(String index, String id) throws IOException {

@@ -1,5 +1,6 @@
 package com.personal.management.service;
 
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.personal.management.entity.SmsRoleMenu;
 
 /**
@@ -8,7 +9,7 @@ import com.personal.management.entity.SmsRoleMenu;
  * @author makejava
  * @since 2026-01-27 19:06:40
  */
-public interface SmsRoleMenuService {
+public interface SmsRoleMenuService extends IService<SmsRoleMenu> {
 
     /**
      * 通过ID查询单条数据

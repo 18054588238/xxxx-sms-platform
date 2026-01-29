@@ -17,7 +17,7 @@ public interface SmsUserService {
      * @param id 主键
      * @return 实例对象
      */
-    SmsUser queryById(Integer id);
+    SmsUser queryById(Long id);
 
     /**
      * 新增数据

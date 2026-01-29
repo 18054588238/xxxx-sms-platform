@@ -1,5 +1,6 @@
 package com.personal.management.service;
 
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.personal.management.entity.SmsUserRole;
 
 /**
@@ -8,7 +9,7 @@ import com.personal.management.entity.SmsUserRole;
  * @author makejava
  * @since 2026-01-27 19:06:40
  */
-public interface SmsUserRoleService {
+public interface SmsUserRoleService extends IService<SmsUserRole> {
 
     /**
      * 通过ID查询单条数据

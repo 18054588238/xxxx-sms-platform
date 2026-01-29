@@ -26,7 +26,7 @@ public interface SmsUserDao {
      * @param id 主键
      * @return 实例对象
      */
-    SmsUser queryById(Integer id);
+    SmsUser queryById(Long id);
 
     /**
      * 统计总行数

@@ -1,5 +1,6 @@
 package com.personal.management.service.impl;
 
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.personal.management.entity.SmsRoleMenu;
 import com.personal.management.dao.SmsRoleMenuDao;
 import com.personal.management.service.SmsRoleMenuService;
@@ -13,7 +14,7 @@ import javax.annotation.Resource;
  * @since 2026-01-27 19:06:40
  */
 @Service("smsRoleMenuService")
-public class SmsRoleMenuServiceImpl implements SmsRoleMenuService {
+public class SmsRoleMenuServiceImpl extends ServiceImpl<SmsRoleMenuDao,SmsRoleMenu> implements SmsRoleMenuService {
     @Resource
     private SmsRoleMenuDao smsRoleMenuDao;
 

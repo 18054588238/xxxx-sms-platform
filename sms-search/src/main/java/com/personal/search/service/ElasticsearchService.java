@@ -15,4 +15,6 @@ public interface ElasticsearchService {
 
     // 更新es中的数据
     void update(String index, String id, Map<String,Object> map) throws IOException;
+
+    Map<String, Object> findSmsByParameters(Map map) throws IOException;
 }

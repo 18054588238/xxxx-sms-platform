@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: sms-back-management
+  profiles:
+    active: dev
+  cloud:
+    nacos: # nacos注册中心地址
+      discovery:
+        server-addr: 172.16.30.198:8848
+      config: # nacos配置中心地址
+        server-addr: 172.16.30.198:8848
+        file-extension: yml
