@@ -17,6 +17,9 @@ spring:
       adjust-dates-to-context-time-zone: false
     time-zone: Asia/Shanghai
 
+
 mybatis:
   configuration:
     map-underscore-to-camel-case: true
+server:
+  port: 19099
