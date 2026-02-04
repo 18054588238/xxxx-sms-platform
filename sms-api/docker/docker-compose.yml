@@ -1,0 +1,13 @@
+# 通过dockerfile构建镜像 ，通过docker-compose.yml运行镜像
+version: '3.1'
+services:
+  sms-api:
+    # 构建镜像
+    build:
+      context: ./ # 构建上下文目录
+      dockerfile: Dockerfile
+    # 指定镜像名称和容器名称
+    image: sms-api:v1.0.0
+    container_name: sms-api
+    ports:
+      - "18081:18081" # 宿主机端口:容器端口

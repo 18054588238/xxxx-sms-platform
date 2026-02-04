@@ -71,4 +71,9 @@
         </dependency>
 
     </dependencies>
+
+    <build>
+        <!-- 给构建的jar包起个名 -->
+        <finalName>sms-api</finalName>
+    </build>
 </project>
