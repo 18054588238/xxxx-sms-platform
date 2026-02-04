@@ -16,7 +16,7 @@ class SmsUserServiceImplTest {
     private SmsUserService userService;
     @Test
     void test() {
-        SmsUser smsUser = userService.queryById(1);
+        SmsUser smsUser = userService.queryById(1l);
         System.out.println(JSON.toJSONString(smsUser));
     }
 }
